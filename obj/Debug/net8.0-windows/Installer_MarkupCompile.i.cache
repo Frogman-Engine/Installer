@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\leeho\OneDrive\사진\문서\Installer\obj\Debug\net8.0-windows\
+C:\Users\leeho\OneDrive\사진\문서\GitHub\Installer\obj\Debug\net8.0-windows\
 Installer
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\leeho\OneDrive\사진\문서\Installer\App.xaml
-11407045341
+C:\Users\leeho\OneDrive\사진\문서\GitHub\Installer\App.xaml
+4551101315
 
-6-1821609024
+9-1315358868
 198-352714763
-MainWindow.xaml;
+MainWindow.xaml;SecondPage.xaml;ThirdPage.xaml;Uninstaller.xaml;
 
-False
+True
 
