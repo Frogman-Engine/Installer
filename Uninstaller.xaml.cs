@@ -14,6 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
+
+
 namespace Installer
 {
     /// <summary>
@@ -25,12 +28,12 @@ namespace Installer
         {
             InitializeComponent();
 
-            this.versionOfInstalledSDKs = new ArrayList();
+            this.versionOfInstalledSDKs = new List<string>();
         }
 
 
-        private ArrayList versionOfInstalledSDKs;
-        public ArrayList ListAllVersionOfInstalledSDKs()
+        private List<string> versionOfInstalledSDKs;
+        public List<string> ListAllVersionOfInstalledSDKs()
         {
             return versionOfInstalledSDKs;
         }

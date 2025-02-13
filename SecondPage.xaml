@@ -9,9 +9,25 @@
       Title="Frogman Engine SDK Installer" 
       Width="1280" Height="720">
 
-    
+
     <Grid Background="White">
         <TextBlock TextWrapping="Wrap" Text="Set Installation Path" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
+
+
+        <StackPanel Orientation="Horizontal" Margin="20,-300,0,0">
+            <TextBox x:Name="InstallationPathTextBox" FontSize="16" VerticalAlignment="Center" Height="25" Width="400" />
+            <Button Content="Browse..." FontSize="16" VerticalAlignment="Center" Click="OnClickBrowseButton" Height="25" Width="100" Margin="10,0,0,0" />
+        </StackPanel>
+
+
+        <Expander Header="SDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="20,240,0,0" Expanded="OnClickDisplaySdkVersionList">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ListBox Name="SdkVersionListBox">
+                    
+                </ListBox>
+            </ScrollViewer>
+        </Expander>
+
 
     </Grid>
 </Page>

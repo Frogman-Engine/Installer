@@ -1,11 +1,9 @@
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 
 
 
@@ -21,28 +19,16 @@ namespace Installer
         UninstallationStage
     }
 
-    /// <summary>
-    /// + feature: install another version of the SDK
-    /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+
+    public class GradientAnimator
     {
-        public MainWindow()
+        private Storyboard storyboard;
+        private ColorAnimation colorAnimationAlpha;
+        private ColorAnimation colorAnimationZulu;
+
+
+        public GradientAnimator()
         {
-            InitializeComponent();
-
-            this.DataContext = this;
-
-            this.toNextButtonText = "Accept";
-            this.toPreviousButtonText = "Decline";
-   
-            this.Closing += MainWindow_Closing;
-
-            this.pageIndex = PageIndex.MainPageLicenseDisplayingStage;
-            this.DirConfigStage = new SecondPage();
-            this.InstallationStage = new ThirdPage();
-            this.uninstaller = new Uninstaller();
-            this.isAlreadyInstalled = this.uninstaller.ListAllVersionOfInstalledSDKs().Count is not 0;
-
             this.colorAnimationAlpha = new ColorAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(7)),
@@ -72,21 +58,65 @@ namespace Installer
 
             Storyboard.SetTargetName(colorAnimationZulu, "GradientStopZulu");
             Storyboard.SetTargetProperty(colorAnimationZulu, new PropertyPath(GradientStop.ColorProperty));
-           
-            this.storyboard.Begin(this, HandoffBehavior.Compose);
+        }
+
+
+        public void PaintLeftPanelWithRedGradient()
+        {
+            this.colorAnimationAlpha.From = ColorConverter.ConvertFromString("#C81D77") as Color?;
+            Debug.Assert(this.colorAnimationAlpha.From is not null);
+
+            this.colorAnimationAlpha.To = ColorConverter.ConvertFromString("#F89B29") as Color?;
+            Debug.Assert(this.colorAnimationAlpha.To is not null);
+
+            this.colorAnimationZulu.From = ColorConverter.ConvertFromString("#F89B29") as Color?;
+            Debug.Assert(this.colorAnimationZulu.From is not null);
+
+            this.colorAnimationZulu.To = ColorConverter.ConvertFromString("#C81D77") as Color?;
+            Debug.Assert(this.colorAnimationZulu.To is not null);
+        }
+
+
+        public void BeginStoryboard(Window window)
+        {
+            this.storyboard.Begin(window, HandoffBehavior.Compose);
+        }
+    }
+
+
+    /// <summary>
+    /// + feature: install another version of the SDK
+    /// </summary>
+    public partial class MainWindow : Window, INotifyPropertyChanged
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            this.DataContext = this;
+
+            this.toNextButtonText = "Accept";
+            this.toPreviousButtonText = "Decline";
+   
+            this.Closing += MainWindow_Closing;
+
+            this.pageIndex = PageIndex.MainPageLicenseDisplayingStage;
+            this.DirConfigStage = new SecondPage("v2025.02.14");
+            this.InstallationStage = new ThirdPage();
+            this.uninstaller = new Uninstaller();
+            this.gradientAnimator = new GradientAnimator();
+
+            this.isAlreadyInstalled = this.uninstaller.ListAllVersionOfInstalledSDKs().Count is not 0;
+            this.targetInstallationVersionOfSDK = "v0.0.0c";
+
+            this.gradientAnimator.BeginStoryboard(this);
         }
 
 
         private bool isAlreadyInstalled;
+        private string targetInstallationVersionOfSDK;
 
-
-        private string targetInstallationVersionOfSDK = "0.0.0";
-
-
-        private Storyboard storyboard;
-        private ColorAnimation colorAnimationAlpha;
-        private ColorAnimation colorAnimationZulu;
-
+        private GradientAnimator gradientAnimator;
 
         private PageIndex pageIndex;
         private SecondPage DirConfigStage;
@@ -102,7 +132,8 @@ namespace Installer
 
                 if (isAlreadyInstalled is true)
                 {
-                    PaintLeftPanelWithRedGradient();
+                    gradientAnimator.PaintLeftPanelWithRedGradient();
+                    gradientAnimator.BeginStoryboard(this);
                     NextButton.Visibility = Visibility.Hidden;
                     PreviousButton.Visibility = Visibility.Hidden;
 
@@ -116,7 +147,8 @@ namespace Installer
                 break;
 
             case PageIndex.DirConfigStage:
-                PaintLeftPanelWithRedGradient();
+                gradientAnimator.PaintLeftPanelWithRedGradient();
+                gradientAnimator.BeginStoryboard(this);
                 NextButton.Visibility = Visibility.Hidden;
                 PreviousButton.Visibility = Visibility.Hidden;
                 
@@ -126,22 +158,6 @@ namespace Installer
             }
         }
 
-        private void PaintLeftPanelWithRedGradient()
-        {
-            this.colorAnimationAlpha.From = ColorConverter.ConvertFromString("#C81D77") as Color?;
-            Debug.Assert(this.colorAnimationAlpha.From is not null);
-
-            this.colorAnimationAlpha.To = ColorConverter.ConvertFromString("#F89B29") as Color?;
-            Debug.Assert(this.colorAnimationAlpha.To is not null);
-
-            this.colorAnimationZulu.From = ColorConverter.ConvertFromString("#F89B29") as Color?;
-            Debug.Assert(this.colorAnimationZulu.From is not null);
-
-            this.colorAnimationZulu.To = ColorConverter.ConvertFromString("#C81D77") as Color?;
-            Debug.Assert(this.colorAnimationZulu.To is not null);
-
-            this.storyboard.Begin(this, HandoffBehavior.Compose);
-        }
 
         private void OnClickButtonDecline(object sender, RoutedEventArgs e)
         {
@@ -194,11 +210,6 @@ namespace Installer
         }
 
 
-        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-        }
-
-
         private void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
             string messageBoxText;
@@ -226,7 +237,7 @@ namespace Installer
             messageBoxResult = MessageBox.Show(messageBoxText, "Exit Confirmation", MessageBoxButton.YesNo, messageBoxImage);
             
             // Handle the user's response.
-            if (messageBoxResult == MessageBoxResult.No)
+            if (messageBoxResult is MessageBoxResult.No)
             {
                 // Prevent the window from closing.
                 e.Cancel = true;

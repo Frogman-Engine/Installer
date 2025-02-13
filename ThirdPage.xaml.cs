@@ -43,12 +43,6 @@ namespace Installer
         }
 
 
-        private void FetchSDK_VersionListFromGitHub()
-        {
-            // Fetch the version list of the Frogman Engine SDK from GitHub.
-        }
-
-
         // Event handler for the "Install" button.
     }
 }
