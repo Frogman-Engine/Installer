@@ -8,13 +8,13 @@ C:\Users\leeho\OneDrive\사진\문서\GitHub\Installer\obj\Debug\net8.0-windows\
 Installer
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\leeho\OneDrive\사진\문서\GitHub\Installer\App.xaml
-4551101315
+5-2107828436
 
-9-1315358868
-198-352714763
-MainWindow.xaml;SecondPage.xaml;ThirdPage.xaml;Uninstaller.xaml;
+10-484146226
+1981839832580
+DirConfigPage.xaml;FinalPage.xaml;InstallationPage.xaml;MainWindow.xaml;Uninstaller.xaml;
 
 False
 

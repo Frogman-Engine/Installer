@@ -14,4 +14,6 @@
         <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine SDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
         <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine SDK have been found. " FontSize="16" FontWeight="Bold" Margin="20,155,20,360"/>
     </Grid>
+    
+    
 </Page>

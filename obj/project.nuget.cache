@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Y4dtNMGjHuc=",
+  "dgSpecHash": "qHpRV4/Dscg=",
   "success": true,
   "projectFilePath": "C:\\Users\\leeho\\OneDrive\\사진\\문서\\GitHub\\Installer\\Installer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\leeho\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.57\\microsoft.windows.sdk.net.ref.10.0.26100.57.nupkg.sha512"
+  ],
   "logs": []
 }
