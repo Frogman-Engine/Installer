@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Installer"
       mc:Ignorable="d" 
       d:DesignWidth="1280" d:DesignHeight="720"
-      Title="Frogman Engine SDK Installer" 
+      Title="Frogman Engine GDK Installer" 
       Width="1280" Height="720">
 
 

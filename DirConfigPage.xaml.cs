@@ -78,7 +78,7 @@ namespace Installer
         {
             SdkVersionListBox.Items.Clear();
 
-            // Fetch the SDK version list from GitHub.
+            // Fetch the GDK version list from GitHub.
             foreach (Release release in releases)
             {
                 string productInfo = $"Github Branch:  {release.ProductBranch};\nIs Pre-Release:  {release.PreRelease};\nPublished At:  {release.PublishedAt};";
@@ -112,7 +112,7 @@ namespace Installer
             string sdkVersion = targetString;
             targetString = "Selected: " + targetString + "";
 
-            MessageBoxResult result = MessageBox.Show(targetString, "SDK Version", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show(targetString, "GDK Version", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result is MessageBoxResult.No)
             {

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Installer"
       mc:Ignorable="d" 
       d:DesignWidth="1280" d:DesignHeight="720"
-      Title="Frogman Engine SDK Installer" 
+      Title="Frogman Engine GDK Installer" 
       Width="1280" Height="720">
 
 
@@ -20,7 +20,7 @@
         </StackPanel>
 
 
-        <Expander Header="SDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="20,240,0,0" Expanded="OnClickDisplaySdkVersionList">
+        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="20,240,0,0" Expanded="OnClickDisplaySdkVersionList">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ListBox x:Name="SdkVersionListBox" ItemsSource="{Binding SdkVersions}" SelectionChanged="OnSelectSdkVersion">
                 </ListBox>

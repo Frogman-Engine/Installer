@@ -6,13 +6,13 @@
       xmlns:local="clr-namespace:Installer"
       mc:Ignorable="d" 
       d:DesignWidth="1280" d:DesignHeight="720"
-      Title="Frogman Engine SDK Uninstaller" 
+      Title="Frogman Engine GDK Uninstaller" 
       Width="1280" Height="720">
 
 
     <Grid Background="White">
-        <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine SDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
-        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine SDK have been found. " FontSize="16" FontWeight="Bold" Margin="20,155,20,360"/>
+        <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine GDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
+        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDK have been found. " FontSize="16" FontWeight="Bold" Margin="20,155,20,360"/>
     </Grid>
     
     

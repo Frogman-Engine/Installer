@@ -27,11 +27,11 @@ namespace Installer
         {
             if (mode == OpMode.Install)
             {
-                this.FinalMessage.Text = "Successfully Installed the Frogman Engine SDK...!";
+                this.FinalMessage.Text = "Successfully Installed the Frogman Engine GDK...!";
                 return;
             }
 
-            this.FinalMessage.Text = "Successfully Uninstalled the Frogman Engine SDK...!";
+            this.FinalMessage.Text = "Successfully Uninstalled the Frogman Engine GDK...!";
         }
     };
 }
