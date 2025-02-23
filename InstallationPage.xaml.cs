@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using System.Windows.Shell;
 
 
 
@@ -84,31 +86,29 @@ namespace Installer
                 {
                     string fileName = "vswhere.exe";
                     Process process = new Process();
-                    string result;
 
                     AppendLog("Checking if Visual Studio 2022 is available on your system...");
-                    DownloadFromWeb("https://github.com/microsoft/vswhere/releases/download/3.1.7/vswhere.exe", sdkInstallationPath, fileName);
+                    DownloadFromWeb(DataBase.VsWhereUrl, sdkInstallationPath, fileName);
 
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = Path.Combine(sdkInstallationPath, fileName),
-                        Arguments = "-products * -requires Microsoft.Component.MSBuild -property installationPath",
+                        FileName = System.IO.Path.Combine(sdkInstallationPath, fileName),
+                        Arguments = DataBase.VsWhereOptions,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     };
                     process.Start();
-                    result = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
 
-                    if (result is "\0")
+                    if (process.StandardOutput.ReadToEnd() is "\0")
                     {
                         AppendLog("Visual Studio 2022 not found on your system.");
                         AppendLog("Please install Visual Studio 2022 to continue.");
                         MessageBox.Show("Visual Studio 2022 not found!", "Visual Studio 2022 not found", MessageBoxButton.OK, MessageBoxImage.Error);
                         Environment.Exit(-1);
                     }
-                    File.Delete(Path.Combine(sdkInstallationPath, fileName));
+                    File.Delete(System.IO.Path.Combine(sdkInstallationPath, fileName));
                     AppendLog("Found Visual Studio 2022.");
                 }
                 catch (Exception e)
@@ -128,7 +128,6 @@ namespace Installer
                 try
                 {
                     Process process = new Process();
-                    string result;
 
                     AppendLog("Checking if Git is available on your system...");
 
@@ -141,10 +140,9 @@ namespace Installer
                         CreateNoWindow = true
                     };
                     process.Start();
-                    result = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
 
-                    if (result is "\0")
+                    if (process.StandardOutput.ReadToEnd() is "\0")
                     {
                         AppendLog("Git is not available on your system.");
                         AppendLog("Please install Git to continue.");
@@ -171,13 +169,29 @@ namespace Installer
                     AppendLog("Installing CMake...");
                     string fileName = "cmake-3.31.5-windows-x86_64.msi";
                     Process process = new Process();
-                    DownloadFromWeb("https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-windows-x86_64.msi", sdkInstallationPath, fileName);
-                    process.StartInfo.FileName = Path.Combine(sdkInstallationPath, fileName);
+                    DownloadFromWeb(DataBase.CMakeUrl, sdkInstallationPath, fileName);
+                    process.StartInfo.FileName = System.IO.Path.Combine(sdkInstallationPath, fileName);
                     process.StartInfo.UseShellExecute = true;
                     process.StartInfo.CreateNoWindow = false;
                     process.Start();
                     process.WaitForExit();
-                    File.Delete(Path.Combine(sdkInstallationPath, fileName));
+                    File.Delete(System.IO.Path.Combine(sdkInstallationPath, fileName));
+
+                    process.StartInfo.FileName = "cmake";
+                    process.StartInfo.Arguments = "--version";
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
+                    process.WaitForExit();
+
+                    if (process.StandardOutput.ReadToEnd() is "\0")
+                    {
+                        AppendLog("CMake installation failed!");
+                        MessageBox.Show("CMake not found!", "CMake not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Environment.Exit(-1);
+                    }
+
                     AppendLog("Completed installing CMake...");
                 }
                 catch (Exception e)
@@ -210,7 +224,7 @@ namespace Installer
                     if ((targetSDK.ZipballUrl is null) || (targetSDK.ZipballUrl is "\0"))
                     {
                         AppendLog("Failed to download the Frogman Engine SDK from GitHub...");
-                        AppendLog("The URL is invalid, please contact the developer: https://github.com/Unknown-Stryker");
+                        AppendLog($"The URL is invalid, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
                         MessageBox.Show("Download failed!", "download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                         Environment.Exit(-1);
                     }
@@ -218,15 +232,16 @@ namespace Installer
                     if ((targetSDK.Name is null) || (targetSDK.Name is "\0"))
                     {
                         AppendLog("Failed to download the Frogman Engine SDK from GitHub...");
-                        AppendLog("The target SDK version cannot be null, please contact the developer: https://github.com/Unknown-Stryker");
+                        AppendLog($"The target SDK version cannot be null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
                         MessageBox.Show("Download failed!", "download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                         Environment.Exit(-1);
                     }
+
                     DownloadFromWeb(targetSDK.ZipballUrl, sdkInstallationPath, targetSDK.Name + ".zip");
                     AppendLog("Completed downloading the Frogman Engine SDK!");
 
-                    string sdkZipPath = Path.Combine(sdkInstallationPath, targerSdkZipFileName);
-                    string sdkPath = Path.Combine(sdkInstallationPath, targetSDK.Name);
+                    string sdkZipPath = System.IO.Path.Combine(sdkInstallationPath, targerSdkZipFileName);
+                    string sdkPath = System.IO.Path.Combine(sdkInstallationPath, targetSDK.Name);
                     ZipFile.ExtractToDirectory(sdkZipPath, sdkPath);
                     string[] folders = Directory.GetDirectories(sdkPath);
                     string tmpPath = sdkPath + "tmp";
@@ -245,23 +260,192 @@ namespace Installer
 
         }
 
+        private Task DownloadAndBuildBoostLibraries(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Downloading the Boost libraries v{DataBase.BoostVersion} ...");
+                    string boostFolderName = $"boost-{DataBase.BoostVersion}";
+                    string boostZipFileName = boostFolderName + ".zip";
+                    string boostZipFilePath = System.IO.Path.Combine(thirdPartyLibrariesPath, boostZipFileName);
+                    DownloadFromWeb(DataBase.BoostUrl, thirdPartyLibrariesPath, boostZipFileName);
+                    ZipFile.ExtractToDirectory(boostZipFilePath, thirdPartyLibrariesPath);
+                    File.Delete(boostZipFilePath);
+                    string boostFolderPath = System.IO.Path.Combine(thirdPartyLibrariesPath, boostFolderName);
+
+                    Directory.SetCurrentDirectory(boostFolderPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "bootstrap.bat",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                    AppendLog(process.StandardOutput.ReadToEnd());
+
+                    process.StartInfo.FileName = "b2.exe";
+                    process.StartInfo.Arguments = DataBase.BoostDebugBuildB2Options;
+                    process.StartInfo.RedirectStandardOutput = false;
+                    process.StartInfo.UseShellExecute = true;
+                    process.StartInfo.CreateNoWindow = false;
+                    AppendLog($"Building debug version of the Boost libraries with {process.StartInfo.Arguments} ...");
+                    process.Start();
+                    process.WaitForExit();
+
+                    process.StartInfo.Arguments = DataBase.BoostReleaseBuildB2Options;
+                    AppendLog($"Building release version of the Boost libraries with {process.StartInfo.Arguments} ...");
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task BuildImGUI(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                  AppendLog($"Building ImGUI version {DataBase.ImGuiVersion} ...");
+                    string imguiPath = System.IO.Path.Combine(  thirdPartyLibrariesPath, 
+                                                                System.IO.Path.Combine(DataBase.FrogmanEngineThirdPartyFolderRelativePath, $"imgui-{DataBase.ImGuiVersion}"));
+                    Directory.SetCurrentDirectory(imguiPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                    //AppendLog(process.StandardOutput.ReadToEnd());
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task BuildThirdPartyLibraries(string sdkInstallationPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    string thirdPartyLibrariesPath = System.IO.Path.Combine(sdkInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
+                    await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
+                    await BuildImGUI(sdkInstallationPath);
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task BuildFrogmanGDK(string sdkInstallationPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+
+                    AppendLog($"Building Frogman Engine Core...");
+                    Directory.SetCurrentDirectory( System.IO.Path.Combine(sdkInstallationPath, "SDK\\Core\\CMake") );
+                    process.Start();
+                    process.WaitForExit();
+
+                    AppendLog($"Building Frogman Engine Framework...");
+                    Directory.SetCurrentDirectory( System.IO.Path.Combine(sdkInstallationPath, "SDK\\Framework\\CMake") );
+                    process.Start();
+                    process.WaitForExit();
+
+                    AppendLog($"Building Frogman Engine...");
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(sdkInstallationPath, "SDK\\Engine\\CMake"));
+                    process.Start();
+                    process.WaitForExit();
+
+                    AppendLog($"Building Frogman Engine Header Tool...");
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(sdkInstallationPath, "SDK\\Header-Tool\\CMake"));
+                    process.Start();
+                    process.WaitForExit();
+
+                    AppendLog($"Building Frogman Engine Unit Test Cases...");
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(sdkInstallationPath, "SDK\\Tests\\Unit-Tests\\CMake"));
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
         public async Task Install(Release targetSDK, string sdkInstallationPath)
         {
             try
             {
+                if ((targetSDK.Name is null) || (targetSDK.Name is "\0"))
+                {
+                    AppendLog("Failed to download the Frogman Engine SDK from GitHub...");
+                    AppendLog($"The target SDK version cannot be null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
+                    MessageBox.Show("Download failed!", "download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+                UpdateProgressBar(1);
+
                 await CheckForVS2022(sdkInstallationPath);
+                UpdateProgressBar(2);
+
                 await CheckForGit();
-                UpdateProgressBar(10);
+                UpdateProgressBar(4);
+
                 await InstallCMake(sdkInstallationPath);
-                UpdateProgressBar(30);
+                UpdateProgressBar(10);
+
                 await DownloadSDK(targetSDK, sdkInstallationPath);
-                UpdateProgressBar(50);
+                UpdateProgressBar(40);
 
-                UpdateProgressBar(70);
+                string gdkPath = System.IO.Path.Combine(sdkInstallationPath, targetSDK.Name);
+                await BuildThirdPartyLibraries(gdkPath);
+                UpdateProgressBar(60);
 
+                await BuildFrogmanGDK(gdkPath);
+                UpdateProgressBar(80);
+
+                // Set PATH environment variable
+                // await AddGdkToPathEnvironmentVariable(gdkPath);
+                AppendLog("Configurating the Frogman SDK environment...");
                 UpdateProgressBar(100);
-
-                AppendLog("Configurating the Frogman GDK environment...");
             }
             catch (Exception e)
             {
@@ -296,7 +480,7 @@ namespace Installer
 
                 // Read the response content as a stream and write it to the file.
                 Stream responseStream = response.Content.ReadAsStreamAsync().Result;
-                FileStream fileStream = new FileStream(Path.Combine(desinationPath, fileNameWithExtension), FileMode.Create, FileAccess.Write, FileShare.None);
+                FileStream fileStream = new FileStream(System.IO.Path.Combine(desinationPath, fileNameWithExtension), FileMode.Create, FileAccess.Write, FileShare.None);
                 responseStream.CopyTo(fileStream);
 
                 fileStream.Close();

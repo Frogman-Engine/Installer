@@ -51,7 +51,7 @@ namespace Installer
             // Add a User-Agent header to the HttpClient instance. UserAgent is a metada that identifies the client application.
             this.httpClient.DefaultRequestHeaders.UserAgent.Add(userAgentHeader);
 
-            this.url = "https://api.github.com/repos/Project-Frogman/Frogman-Engine/releases";
+            this.url = DataBase.FrogmanEngineGdkReleaseListUrl;
 
             this.releases = FetchSdkVersionListFromGitHub();
 

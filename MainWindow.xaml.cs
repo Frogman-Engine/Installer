@@ -94,7 +94,6 @@ namespace Installer
         public MainWindow()
         {
             InitializeComponent();
-
             this.DataContext = this;
 
             this.toNextButtonText = "Accept";
