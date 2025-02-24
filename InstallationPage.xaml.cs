@@ -13,9 +13,6 @@ using System.Windows.Media.Animation;
 
 namespace Installer
 {
-    /// <summary>
-    /// GDK Installation & Download Page
-    /// </summary>
     public partial class InstallationPage : System.Windows.Controls.Page
     {
         public InstallationPage(string appVersion)
@@ -28,33 +25,29 @@ namespace Installer
 
             // Add a User-Agent header to the HttpClient instance. UserAgent is a metada that identifies the client application.
             this.httpClient.DefaultRequestHeaders.UserAgent.Add(userAgentHeader);
+
+            this.progressBarAnimation = new DoubleAnimation
+            {
+                Duration = TimeSpan.FromSeconds(2)
+            };
         }
 
-
+        DoubleAnimation progressBarAnimation;
         public void UpdateProgressBar(double progress)
         {
             if (InstallationProgressBar.Dispatcher.CheckAccess())
             {
-                DoubleAnimation animation = new DoubleAnimation
-                {
-                    From = InstallationProgressBar.Value,
-                    To = progress,
-                    Duration = TimeSpan.FromSeconds(2) // Adjust the duration as needed
-                };
-                InstallationProgressBar.BeginAnimation(System.Windows.Controls.Primitives.RangeBase.ValueProperty, animation);
+                progressBarAnimation.From = InstallationProgressBar.Value;
+                progressBarAnimation.To = progress;
+
+                InstallationProgressBar.BeginAnimation(System.Windows.Controls.Primitives.RangeBase.ValueProperty, progressBarAnimation);
                 Percent.Text = progress.ToString() + '%';
                 return;
             }
 
             InstallationProgressBar.Dispatcher.Invoke(() =>
             {
-                DoubleAnimation animation = new DoubleAnimation
-                {
-                    From = InstallationProgressBar.Value,
-                    To = progress,
-                    Duration = TimeSpan.FromSeconds(2) // Adjust the duration as needed
-                };
-                InstallationProgressBar.BeginAnimation(System.Windows.Controls.Primitives.RangeBase.ValueProperty, animation);
+                InstallationProgressBar.BeginAnimation(System.Windows.Controls.Primitives.RangeBase.ValueProperty, progressBarAnimation);
                 Percent.Text = progress.ToString() + '%';
             });
         }
@@ -77,7 +70,7 @@ namespace Installer
         }
 
 
-        private Task CheckForVS2022(string GDKInstallationPath)
+        private Task CheckForVS2022(string gdkInstallationPath)
         {
             return Task.Run(() =>
             {
@@ -87,11 +80,11 @@ namespace Installer
                     Process process = new Process();
 
                     AppendLog("Checking if Visual Studio 2022 is available on your system...");
-                    DownloadFromWeb(DataBase.VsWhereUrl, GDKInstallationPath, fileName);
+                    DownloadFromWeb(DataBase.VsWhereUrl, gdkInstallationPath, fileName);
 
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = System.IO.Path.Combine(GDKInstallationPath, fileName),
+                        FileName = System.IO.Path.Combine(gdkInstallationPath, fileName),
                         Arguments = DataBase.VsWhereOptions,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
@@ -107,7 +100,7 @@ namespace Installer
                         MessageBox.Show("Visual Studio 2022 not found!", "Visual Studio 2022 not found", MessageBoxButton.OK, MessageBoxImage.Error);
                         Environment.Exit(-1);
                     }
-                    File.Delete(System.IO.Path.Combine(GDKInstallationPath, fileName));
+                    File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
                     AppendLog("Found Visual Studio 2022.");
                 }
                 catch (Exception e)
@@ -159,22 +152,22 @@ namespace Installer
             });
         }
 
-        private Task InstallCMake(string GDKInstallationPath)
+        private Task InstallCMake(string gdkInstallationPath)
         {
-            return Task.Run(() => 
+            return Task.Run(() =>
             {
                 try
                 {
                     AppendLog("Installing CMake...");
                     string fileName = "cmake-3.31.5-windows-x86_64.msi";
                     Process process = new Process();
-                    DownloadFromWeb(DataBase.CMakeUrl, GDKInstallationPath, fileName);
-                    process.StartInfo.FileName = System.IO.Path.Combine(GDKInstallationPath, fileName);
+                    DownloadFromWeb(DataBase.CMakeUrl, gdkInstallationPath, fileName);
+                    process.StartInfo.FileName = System.IO.Path.Combine(gdkInstallationPath, fileName);
                     process.StartInfo.UseShellExecute = true;
                     process.StartInfo.CreateNoWindow = false;
                     process.Start();
                     process.WaitForExit();
-                    File.Delete(System.IO.Path.Combine(GDKInstallationPath, fileName));
+                    File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
 
                     process.StartInfo.FileName = "cmake";
                     process.StartInfo.Arguments = "--version";
@@ -203,7 +196,7 @@ namespace Installer
 
         }
 
-        private Task DownloadGDK(Release targetGDK, string GDKInstallationPath)
+        private Task DownloadGDK(Release targetGDK, string gdkInstallationPath)
         {
             return Task.Run(() =>
             {
@@ -212,7 +205,7 @@ namespace Installer
                     string targerGDKZipFileName = targetGDK.Name + ".zip";
 
                     AppendLog("Downloading the Frogman Engine GDK from GitHub...");
-                    if ((GDKInstallationPath is null) || (GDKInstallationPath is "\0"))
+                    if ((gdkInstallationPath is null) || (gdkInstallationPath is "\0"))
                     {
                         AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
                         AppendLog("GDK installation path not set.");
@@ -228,26 +221,27 @@ namespace Installer
                         Environment.Exit(-1);
                     }
 
-                    if ((targetGDK.Name is null) || (targetGDK.Name is "\0"))
+                    if ((targetGDK.Name is null) || (targetGDK.Name is "\0") ||
+                        (targetGDK.Tag is null) || (targetGDK.Tag is "\0"))
                     {
                         AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
-                        AppendLog($"The target GDK version cannot be null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
+                        AppendLog($"The release title or the release tag is null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
                         MessageBox.Show("Download failed!", "download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                         Environment.Exit(-1);
                     }
 
-                    DownloadFromWeb(targetGDK.ZipballUrl, GDKInstallationPath, targetGDK.Name + ".zip");
+                    DownloadFromWeb(targetGDK.ZipballUrl, gdkInstallationPath, targetGDK.Name + ".zip");
                     AppendLog("Completed downloading the Frogman Engine GDK!");
 
-                    string GDKZipPath = System.IO.Path.Combine(GDKInstallationPath, targerGDKZipFileName);
-                    string GDKPath = System.IO.Path.Combine(GDKInstallationPath, targetGDK.Name);
-                    ZipFile.ExtractToDirectory(GDKZipPath, GDKPath);
-                    string[] folders = Directory.GetDirectories(GDKPath);
-                    string tmpPath = GDKPath + "tmp";
+                    string gdkZipPath = System.IO.Path.Combine(gdkInstallationPath, targerGDKZipFileName);
+                    string gdkPath = System.IO.Path.Combine(gdkInstallationPath, targetGDK.Name);
+                    ZipFile.ExtractToDirectory(gdkZipPath, gdkPath);
+                    string[] folders = Directory.GetDirectories(gdkPath);
+                    string tmpPath = gdkPath + "tmp";
                     Directory.Move(folders.First(), tmpPath);
-                    File.Delete(GDKZipPath);
-                    Directory.Delete(GDKPath);
-                    Directory.Move(tmpPath, GDKPath);
+                    File.Delete(gdkZipPath);
+                    Directory.Delete(gdkPath);
+                    Directory.Move(tmpPath, gdkPath);
                 }
                 catch (Exception e)
                 {
@@ -316,8 +310,8 @@ namespace Installer
             {
                 try
                 {
-                  AppendLog($"Building ImGUI version {DataBase.ImGuiVersion} ...");
-                    string imguiPath = System.IO.Path.Combine(  thirdPartyLibrariesPath, 
+                    AppendLog($"Building ImGUI version {DataBase.ImGuiVersion} ...");
+                    string imguiPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
                                                                 System.IO.Path.Combine(DataBase.FrogmanEngineThirdPartyFolderRelativePath, $"imgui-{DataBase.ImGuiVersion}"));
                     Directory.SetCurrentDirectory(imguiPath);
                     Process process = new Process();
@@ -340,15 +334,15 @@ namespace Installer
             });
         }
 
-        private Task BuildThirdPartyLibraries(string GDKInstallationPath)
+        private Task BuildThirdPartyLibraries(string gdkInstallationPath)
         {
             return Task.Run(async () =>
             {
                 try
                 {
-                    string thirdPartyLibrariesPath = System.IO.Path.Combine(GDKInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
+                    string thirdPartyLibrariesPath = System.IO.Path.Combine(gdkInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
                     await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
-                    await BuildImGUI(GDKInstallationPath);
+                    await BuildImGUI(gdkInstallationPath);
                 }
                 catch (Exception e)
                 {
@@ -359,7 +353,7 @@ namespace Installer
             });
         }
 
-        private Task BuildFrogmanGDK(string GDKInstallationPath)
+        private Task BuildFrogmanGDK(string gdkInstallationPath)
         {
             return Task.Run(() =>
             {
@@ -375,27 +369,27 @@ namespace Installer
                     };
 
                     AppendLog($"Building Frogman Engine Core...");
-                    Directory.SetCurrentDirectory( System.IO.Path.Combine(GDKInstallationPath, "SDK\\Core\\CMake") );
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Core\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
                     AppendLog($"Building Frogman Engine Framework...");
-                    Directory.SetCurrentDirectory( System.IO.Path.Combine(GDKInstallationPath, "SDK\\Framework\\CMake") );
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Framework\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
                     AppendLog($"Building Frogman Engine...");
-                    Directory.SetCurrentDirectory( System.IO.Path.Combine(GDKInstallationPath, "SDK\\Engine\\CMake") );
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Engine\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
                     AppendLog($"Building Frogman Engine Header Tool...");
-                    Directory.SetCurrentDirectory( System.IO.Path.Combine(GDKInstallationPath, "SDK\\Header-Tool\\CMake") );
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Header-Tool\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
                     AppendLog($"Building Frogman Engine Unit Test Cases...");
-                    Directory.SetCurrentDirectory( System.IO.Path.Combine(GDKInstallationPath, "SDK\\Tests\\Unit-Tests") );
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Tests\\Unit-Tests"));
                     process.Start();
                     process.WaitForExit();
                 }
@@ -417,14 +411,14 @@ namespace Installer
                 MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(-1);
             }
-            string variableName = $"FROGMAN_GDK_{targetGDK.Tag}_PATH";
+            string variableName = DataBase.GenerateGDKSystemPathVariableName(targetGDK.Tag);
 
             try
             {
                 Environment.SetEnvironmentVariable(variableName, gdkPath, EnvironmentVariableTarget.Machine);
                 AppendLog($"Set {variableName} environment variable to {gdkPath}.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 AppendLog(e.Message);
                 MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -445,7 +439,7 @@ namespace Installer
             }
         }
 
-        public async Task Install(Release targetGDK, string GDKInstallationPath)
+        public async Task Install(Release targetGDK, string gdkInstallationPath)
         {
             try
             {
@@ -458,19 +452,19 @@ namespace Installer
                 }
                 UpdateProgressBar(1);
 
-                await CheckForVS2022(GDKInstallationPath);
+                await CheckForVS2022(gdkInstallationPath);
                 UpdateProgressBar(2);
 
                 await CheckForGit();
                 UpdateProgressBar(4);
 
-                await InstallCMake(GDKInstallationPath);
+                await InstallCMake(gdkInstallationPath);
                 UpdateProgressBar(10);
 
-                await DownloadGDK(targetGDK, GDKInstallationPath);
+                await DownloadGDK(targetGDK, gdkInstallationPath);
                 UpdateProgressBar(40);
 
-                string gdkPath = System.IO.Path.Combine(GDKInstallationPath, targetGDK.Name);
+                string gdkPath = System.IO.Path.Combine(gdkInstallationPath, targetGDK.Name);
                 await BuildThirdPartyLibraries(gdkPath);
                 UpdateProgressBar(60);
 
@@ -522,7 +516,7 @@ namespace Installer
                 fileStream.Close();
                 responseStream.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 AppendLog(e.Message);
                 MessageBox.Show("Download Failed!", "Download Failure", MessageBoxButton.OK, MessageBoxImage.Error);

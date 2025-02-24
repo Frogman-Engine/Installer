@@ -20,9 +20,9 @@
         </StackPanel>
 
 
-        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="20,240,0,0" Expanded="OnClickDisplaySdkVersionList">
+        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplaySdkVersionList">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <ListBox x:Name="SdkVersionListBox" ItemsSource="{Binding SdkVersions}" SelectionChanged="OnSelectSdkVersion">
+                <ListBox x:Name="SdkVersionListBox" SelectionChanged="OnSelectSdkVersion">
                 </ListBox>
             </ScrollViewer>
         </Expander>

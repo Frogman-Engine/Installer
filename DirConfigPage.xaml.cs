@@ -36,9 +36,8 @@ namespace Installer
     }
 
 
-    /// <summary>
-    /// Path Configuration Page
-    /// </summary>
+
+
     public partial class DirConfigPage : System.Windows.Controls.Page
     {
         public DirConfigPage(string appVersion)
@@ -53,7 +52,7 @@ namespace Installer
 
             this.url = DataBase.FrogmanEngineGdkReleaseListUrl;
 
-            this.releases = FetchSdkVersionListFromGitHub();
+            releases = FetchSdkVersionListFromGitHub();
 
             this.dialog = new OpenFolderDialog();
             this.dialog.ValidateNames = false;
@@ -78,12 +77,36 @@ namespace Installer
         {
             SdkVersionListBox.Items.Clear();
 
-            // Fetch the GDK version list from GitHub.
+            if (MainWindow.InstalledVersionsOfGDKs.Count is 0)
+            {
+                foreach (Release release in releases)
+                {
+                    Debug.Assert(release.Tag is not null);
+                    string productInfo = $"Github Branch:  {release.ProductBranch}\n";
+                    productInfo += $"Is Pre-Release:  {release.PreRelease}\n";
+                    productInfo += $"Published at:  {release.PublishedAt}\n";
+                    productInfo += $"Release Title:  {release.Name}\n";
+                    productInfo += $"Release Tag:  {release.Tag}\n";
+                    SdkVersionListBox.Items.Add(productInfo);
+                }
+                return;
+            }
+
             foreach (Release release in releases)
             {
-                string productInfo = $"Github Branch:  {release.ProductBranch};\nIs Pre-Release:  {release.PreRelease};\nPublished At:  {release.PublishedAt};";
-                productInfo += $"\nRelease Title (Version):  {release.Name}";
-                SdkVersionListBox.Items.Add(productInfo);
+                Debug.Assert(release.Tag is not null);
+                foreach (string installedGDK in MainWindow.InstalledVersionsOfGDKs)
+                {
+                    if (installedGDK.Contains(release.Tag) is false)
+                    {
+                        string productInfo = $"Github Branch:  {release.ProductBranch}\n";
+                        productInfo += $"Is Pre-Release:  {release.PreRelease}\n";
+                        productInfo += $"Published at:  {release.PublishedAt}\n";
+                        productInfo += $"Release Title:  {release.Name}\n";
+                        productInfo += $"Release Tag:  {release.Tag}\n";
+                        SdkVersionListBox.Items.Add(productInfo);
+                    }
+                }
             }
         }
 
@@ -106,10 +129,9 @@ namespace Installer
                 return;
             }
 
-            int index = selectedItem.IndexOf("Release Title (Version):");
-            string targetString = selectedItem.Substring(index + "Release Title (Version):  ".Length);
+            int index = selectedItem.IndexOf("Release Title:");
+            string targetString = selectedItem.Substring(index + "Release Title:  ".Length);
             Debug.Assert(targetString is not null);
-            string sdkVersion = targetString;
             targetString = "Selected: " + targetString + "";
 
             MessageBoxResult result = MessageBox.Show(targetString, "GDK Version", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -121,7 +143,9 @@ namespace Installer
 
             foreach (Release release in releases)
             {
-                if (release.Name == sdkVersion)
+                Debug.Assert(release.Tag is not null);
+
+                if (selectedItem.Contains(release.Tag) is true)
                 {
                     targetSDK = release;
                     return;
@@ -130,7 +154,11 @@ namespace Installer
         }
 
 
-        private List<Release> releases;
+        private static List<Release> releases = new List<Release>();
+        public static List<Release> Releases
+        {
+            get { return releases; }
+        }
         private HttpClient httpClient;
         private ProductInfoHeaderValue userAgentHeader;
         private string url;

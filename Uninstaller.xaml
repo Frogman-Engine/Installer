@@ -12,8 +12,16 @@
 
     <Grid Background="White">
         <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine GDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
-        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDK have been found. " FontSize="16" FontWeight="Bold" Margin="20,155,20,360"/>
+        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDKs have been found. " FontSize="16" FontWeight="Bold" Margin="22,155,20,360"/>
+
+
+        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplaySdkVersionList">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ListBox x:Name="SdkVersionListBox" SelectionChanged="OnSelectSdkVersion">
+                </ListBox>
+            </ScrollViewer>
+        </Expander>
+
+
     </Grid>
-    
-    
 </Page>

@@ -15,6 +15,7 @@ namespace Installer
         MainPageLicenseDisplayingStage,
         DirConfigStage,
         InstallationStage,
+        UninstallerStage,
         UninstallationStage,
         FinalPage
     }
@@ -84,13 +85,10 @@ namespace Installer
     }
 
 
-    /// <summary>
-    /// + feature: install another version of the SDK
-    /// </summary>
+
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private string installerVersion = "v2025.02.14";
-
         public MainWindow()
         {
             InitializeComponent();
@@ -104,29 +102,33 @@ namespace Installer
             this.Closing += OnClose;
            
             this.pageIndex = PageIndex.MainPageLicenseDisplayingStage;
-            this.dirConfigStage = new DirConfigPage(installerVersion);
-            this.installationStage = new InstallationPage(installerVersion);
+            this.dirConfigStage = new DirConfigPage(DataBase.GDKInstallerVersion);
+            this.installationStage = new InstallationPage(DataBase.GDKInstallerVersion);
             this.finalPage = new FinalPage();
             this.uninstaller = new Uninstaller();
+            this.uninstallationStage = new UninstallationPage();
             this.gradientAnimator = new GradientAnimator(Colors.SeaGreen, Colors.MidnightBlue);
-
-            this.isAlreadyInstalled = this.uninstaller.ListAllVersionOfInstalledSDKs().Count is not 0;
-            this.targetInstallationVersionOfSDK = this.dirConfigStage.TargetSDK.Name;
-
             this.gradientAnimator.Storyboard.Begin(this, HandoffBehavior.Compose);
+            installedVersionsOfGDKs = this.uninstaller.ListAllVersionOfInstalledSDKs();
+            this.isAlreadyInstalled = installedVersionsOfGDKs.Count is not 0;
         }
 
 
-        private bool isAlreadyInstalled;
-        private string? targetInstallationVersionOfSDK;
-
         private GradientAnimator gradientAnimator;
+        private static List<string> installedVersionsOfGDKs = new List<string>();
+        public static List<string> InstalledVersionsOfGDKs
+        {
+            get { return installedVersionsOfGDKs; }
+        }
+        private bool isAlreadyInstalled;
+
 
         private PageIndex pageIndex;
         private DirConfigPage dirConfigStage;
         private InstallationPage installationStage;
         private FinalPage finalPage;
         private Uninstaller uninstaller;
+        private UninstallationPage uninstallationStage;
         private void OnClickGoNext(object sender, RoutedEventArgs e)
         {
             switch (pageIndex)
@@ -162,8 +164,29 @@ namespace Installer
                     MessageBox.Show("The installation process is not completed yet.", "Frogman Engine SDK Installer", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
+                finalPage.SetOpMode(OpMode.Install);
                 MainFrame.Navigate(finalPage);
                 return;
+
+            case PageIndex.UninstallationStage:
+                if (uninstallationStage.UninstallationProgressBar.Value < 100)
+                {
+                    MessageBox.Show("The uninstallation process is not completed yet.", "Frogman Engine SDK Uninstaller", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                finalPage.SetOpMode(OpMode.Uninstall);
+                MainFrame.Navigate(finalPage);
+                return;
+
+                case PageIndex.UninstallerStage:
+                if (uninstaller.TargetSDK.Name is null)
+                {
+                    MessageBox.Show("Please select the SDK version.", "Frogman Engine SDK Installer", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MainFrame.Navigate(uninstallationStage);
+                break;
 
             case PageIndex.FinalPage:
                 Application.Current.Shutdown();
@@ -181,7 +204,10 @@ namespace Installer
                 Environment.Exit(0);
                 return;
 
-            case PageIndex.UninstallationStage:
+            case PageIndex.UninstallerStage:
+                MainFrame.Navigate(dirConfigStage);
+                return;
+
             case PageIndex.DirConfigStage:
                 pageIndex = PageIndex.MainPageLicenseDisplayingStage;
                 ToNextButtonText = "Accept";
@@ -197,10 +223,16 @@ namespace Installer
             switch (e.Content)
             {
             case Uninstaller:
-                pageIndex = PageIndex.UninstallationStage;
+                pageIndex = PageIndex.UninstallerStage;
                 gradientAnimator.PaintLeftPanelWithRedGradient(this);
-                ToNextButtonText = "Next";
-                ToPreviousButtonText = "Previous";
+                ToNextButtonText = "Proceed";
+                ToPreviousButtonText = "Skip";
+                return;
+
+            case UninstallationPage:
+                pageIndex = PageIndex.UninstallationStage;
+                NextButton.Visibility = Visibility.Hidden;
+                PreviousButton.Visibility = Visibility.Hidden;
                 return;
 
             case DirConfigPage:
@@ -218,7 +250,7 @@ namespace Installer
 
             case FinalPage:
                 pageIndex = PageIndex.FinalPage;
-                finalPage.SetOpMode(OpMode.Install);
+                
                 return;
             }
         }
@@ -228,19 +260,16 @@ namespace Installer
         {
             switch (e.Content)
             {
-            case Uninstaller:
-                return;
-
-            case DirConfigPage:
+            case UninstallationPage:
+                await uninstallationStage.Uninstall(uninstaller.TargetSDK);
+                NextButton.Visibility = Visibility.Visible;
+                ToNextButtonText = "Complete";
                 return;
 
             case InstallationPage:
                 await installationStage.Install(dirConfigStage.TargetSDK, dirConfigStage.InstallationPathTextBox.Text);
                 NextButton.Visibility = Visibility.Visible;
                 ToNextButtonText = "Complete";
-                return;
-
-            case FinalPage:
                 return;
             }
         }
@@ -257,7 +286,7 @@ namespace Installer
                 return;
 
             case PageIndex.UninstallationStage:
-                messageBoxText = "Frogman Engine SDK Installer: Unable to terminate the process while uninstalling the SDK.";
+                messageBoxText = "Frogman Engine GDK Installer: Unable to terminate the process while uninstalling the SDK.";
                 MessageBox.Show(messageBoxText, "Exit Confirmation", MessageBoxButton.OK, MessageBoxImage.Stop);
 
                 // Prevent the window from closing.
@@ -265,7 +294,7 @@ namespace Installer
                 return;
 
             case PageIndex.InstallationStage:
-                messageBoxText = "Frogman Engine SDK Installer: Unable to terminate the process while installing the SDK.";
+                messageBoxText = "Frogman Engine GDK Installer: Unable to terminate the process while installing the SDK.";
                 MessageBox.Show(messageBoxText, "Exit Confirmation", MessageBoxButton.OK, MessageBoxImage.Stop);
                   
                 // Prevent the window from closing.
@@ -273,7 +302,7 @@ namespace Installer
                 return;
 
             default:
-                messageBoxText = "Frogman Engine SDK Installer: Are you sure you want to terminate the installator?";
+                messageBoxText = "Frogman Engine GDK Installer: Are you sure you want to terminate the installator?";
                 messageBoxResult = MessageBox.Show(messageBoxText, "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 // Handle the user's response.

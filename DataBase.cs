@@ -9,6 +9,12 @@ namespace Installer
 {
     class DataBase
     {
+        private static string gdkInstallerVersion = "v2025.02.24";
+        public static string GDKInstallerVersion
+        {
+            get { return gdkInstallerVersion; }
+        }
+
         private static string frogmanEngineThirdPartyFolderRelativePath = "SDK\\Third-Party\\Libraries";
         public static string FrogmanEngineThirdPartyFolderRelativePath
         {
@@ -69,6 +75,21 @@ namespace Installer
         public static string ImGuiVersion
         {
             get { return imGuiVersion; }
+        }
+
+        private static string gdkSystemPathVariableNamePrefix = "FROGMAN_GDK_";
+        public static string GDKSystemPathVariableNamePrefix
+        {
+            get { return gdkSystemPathVariableNamePrefix; }
+        }
+        private static string gdkSystemPathVariableNameSuffix = "_PATH";
+        public static string GDKSystemPathVariableNameSuffix
+        {
+            get { return gdkSystemPathVariableNameSuffix; }
+        }
+        public static string GenerateGDKSystemPathVariableName(string gdkversion)
+        {
+            return $"{gdkSystemPathVariableNamePrefix}{gdkversion}{gdkSystemPathVariableNameSuffix}";
         }
     }
 }
