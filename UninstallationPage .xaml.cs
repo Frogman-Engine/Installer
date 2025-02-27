@@ -69,7 +69,7 @@ namespace Installer
             {
                 try
                 {
-                    if ((targetGDK.Tag is null) || (targetGDK.Tag is "\0"))
+                    if ((targetGDK.Tag is null) || (targetGDK.Tag.Length is 0))
                     {
                         AppendLog("Failed to uninstall the Frogman Engine GDK!");
                         AppendLog($"The release tag is null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
@@ -95,7 +95,7 @@ namespace Installer
         {
             try
             {
-                if ((targetGDK.Tag is null) || (targetGDK.Tag is "\0"))
+                if ((targetGDK.Tag is null) || (targetGDK.Tag.Length is 0))
                 {
                     AppendLog("Failed to uninstall the Frogman Engine GDK!");
                     AppendLog($"The release tag is null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");

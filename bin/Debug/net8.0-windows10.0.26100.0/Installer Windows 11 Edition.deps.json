@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "Installer/1.0.0": {
+      "Installer Windows 11 Edition/1.0.0": {
         "dependencies": {
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.26100.57"
         },
         "runtime": {
-          "Installer.dll": {}
+          "Installer Windows 11 Edition.dll": {}
         }
       },
       "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
@@ -29,7 +29,7 @@
     }
   },
   "libraries": {
-    "Installer/1.0.0": {
+    "Installer Windows 11 Edition/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

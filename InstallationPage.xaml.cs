@@ -70,7 +70,7 @@ namespace Installer
         }
 
 
-        private Task CheckForVS2022(string gdkInstallationPath)
+        private Task InstallVisualStudio2022(string gdkInstallationPath)
         {
             return Task.Run(() =>
             {
@@ -93,12 +93,18 @@ namespace Installer
                     process.Start();
                     process.WaitForExit();
 
-                    if (process.StandardOutput.ReadToEnd() is "\0")
+                    if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("Visual Studio 2022 not found on your system.");
-                        AppendLog("Please install Visual Studio 2022 to continue.");
-                        MessageBox.Show("Visual Studio 2022 not found!", "Visual Studio 2022 not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Environment.Exit(-1);
+                        AppendLog("Visual Studio 2022 is not available on your system.");
+                        AppendLog("Installing the latest Visual Studio 2022 Community...");
+                        AppendLog("winget install --id Microsoft.VisualStudio.2022.Community -e --source winget");
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = "/c winget install --id Microsoft.VisualStudio.2022.Community -e --source winget";
+                        process.Start();
+                        process.WaitForExit();
+                        AppendLog(process.StandardOutput.ReadToEnd());
+                        AppendLog("Successfully installed Visual Studio 2022 Community.");
+                        return;
                     }
                     File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
                     AppendLog("Found Visual Studio 2022.");
@@ -113,20 +119,18 @@ namespace Installer
 
         }
 
-        private Task CheckForGit()
+        private Task InstallGit()
         {
             return Task.Run(() =>
             {
                 try
                 {
                     Process process = new Process();
-
                     AppendLog("Checking if Git is available on your system...");
-
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "git",
-                        Arguments = "--version",
+                        FileName = "cmd.exe",
+                        Arguments = "/c git --version",
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
@@ -134,12 +138,18 @@ namespace Installer
                     process.Start();
                     process.WaitForExit();
 
-                    if (process.StandardOutput.ReadToEnd() is "\0")
+                    if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
                         AppendLog("Git is not available on your system.");
-                        AppendLog("Please install Git to continue.");
-                        MessageBox.Show("Git not found!", "Git not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Environment.Exit(-1);
+                        AppendLog("Installing the latest Git...");
+                        AppendLog("winget install --id Git.Git -e --source winget");
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = "/c winget install --id Git.Git -e --source winget";
+                        process.Start();
+                        process.WaitForExit();
+                        AppendLog(process.StandardOutput.ReadToEnd());
+                        AppendLog("Successfully installed Git.");
+                        return;
                     }
                     AppendLog("Found Git.");
                 }
@@ -158,33 +168,34 @@ namespace Installer
             {
                 try
                 {
-                    AppendLog("Installing CMake...");
-                    string fileName = "cmake-3.31.5-windows-x86_64.msi";
+                    AppendLog("Checking if CMake is available on your system...");
                     Process process = new Process();
-                    DownloadFromWeb(DataBase.CMakeUrl, gdkInstallationPath, fileName);
-                    process.StartInfo.FileName = System.IO.Path.Combine(gdkInstallationPath, fileName);
-                    process.StartInfo.UseShellExecute = true;
-                    process.StartInfo.CreateNoWindow = false;
-                    process.Start();
-                    process.WaitForExit();
-                    File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
-
-                    process.StartInfo.FileName = "cmake";
-                    process.StartInfo.Arguments = "--version";
+                    process.StartInfo.FileName = "cmd.exe ";
+                    process.StartInfo.Arguments = "/c cmake --version";
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.CreateNoWindow = true;
                     process.Start();
                     process.WaitForExit();
 
-                    if (process.StandardOutput.ReadToEnd() is "\0")
+                    if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("CMake installation failed!");
-                        MessageBox.Show("CMake not found!", "CMake not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Environment.Exit(-1);
+                        AppendLog("CMake is not available on your system.");
+                        AppendLog("Installing the CMake version 3.31.5 ...");
+                        string fileName = "cmake-3.31.5-windows-x86_64.msi";
+                        DownloadFromWeb(DataBase.CMakeUrl, gdkInstallationPath, fileName);
+                        process.StartInfo.FileName = System.IO.Path.Combine(gdkInstallationPath, fileName);
+                        process.StartInfo.RedirectStandardOutput = false;
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.CreateNoWindow = false;
+                        process.Start();
+                        process.WaitForExit();
+                        File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
+                        AppendLog("Completed installing CMake...");
+                        return;
                     }
+                    AppendLog("Found CMake.");
 
-                    AppendLog("Completed installing CMake...");
                 }
                 catch (Exception e)
                 {
@@ -205,7 +216,7 @@ namespace Installer
                     string targerGDKZipFileName = targetGDK.Name + ".zip";
 
                     AppendLog("Downloading the Frogman Engine GDK from GitHub...");
-                    if ((gdkInstallationPath is null) || (gdkInstallationPath is "\0"))
+                    if ((gdkInstallationPath is null) || (gdkInstallationPath.Length is 0))
                     {
                         AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
                         AppendLog("GDK installation path not set.");
@@ -213,7 +224,7 @@ namespace Installer
                         Environment.Exit(-1);
                     }
 
-                    if ((targetGDK.ZipballUrl is null) || (targetGDK.ZipballUrl is "\0"))
+                    if ((targetGDK.ZipballUrl is null) || (targetGDK.ZipballUrl.Length is 0))
                     {
                         AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
                         AppendLog($"The URL is invalid, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
@@ -221,8 +232,8 @@ namespace Installer
                         Environment.Exit(-1);
                     }
 
-                    if ((targetGDK.Name is null) || (targetGDK.Name is "\0") ||
-                        (targetGDK.Tag is null) || (targetGDK.Tag is "\0"))
+                    if ((targetGDK.Name is null) || (targetGDK.Name.Length is 0) ||
+                        (targetGDK.Tag is null) || (targetGDK.Tag.Length is 0))
                     {
                         AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
                         AppendLog($"The release title or the release tag is null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
@@ -404,7 +415,7 @@ namespace Installer
 
         private void SetGdkEnvironmentVariable(Release targetGDK, string gdkPath)
         {
-            if ((targetGDK.Tag is null) || (targetGDK.Tag is "\0"))
+            if ((targetGDK.Tag is null) || (targetGDK.Tag.Length is 0))
             {
                 AppendLog("Failed to set the environment variable for the Frogman Engine GDK...");
                 AppendLog($"The target GDK version cannot be null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
@@ -443,7 +454,7 @@ namespace Installer
         {
             try
             {
-                if ((targetGDK.Name is null) || (targetGDK.Name is "\0"))
+                if ((targetGDK.Name is null) || (targetGDK.Name.Length is 0))
                 {
                     AppendLog("Failed to download the Frogman Engine GDK from GitHub...");
                     AppendLog($"The target GDK version cannot be null, please contact the developer: {DataBase.FrogmanEngineDeveloperGitHubProfileUrl}");
@@ -452,10 +463,10 @@ namespace Installer
                 }
                 UpdateProgressBar(1);
 
-                await CheckForVS2022(gdkInstallationPath);
+                await InstallVisualStudio2022(gdkInstallationPath);
                 UpdateProgressBar(2);
 
-                await CheckForGit();
+                await InstallGit();
                 UpdateProgressBar(4);
 
                 await InstallCMake(gdkInstallationPath);
