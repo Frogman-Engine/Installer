@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Media.Animation;
+using System.Windows.Media.TextFormatting;
 
 
 
@@ -95,16 +96,21 @@ namespace Installer
 
                     if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("Visual Studio 2022 is not available on your system.");
-                        AppendLog("Installing the latest Visual Studio 2022 Community...");
-                        AppendLog("winget install --id Microsoft.VisualStudio.2022.Community -e --source winget");
-                        process.StartInfo.FileName = "cmd.exe";
-                        process.StartInfo.Arguments = "/c winget install --id Microsoft.VisualStudio.2022.Community -e --source winget";
-                        process.Start();
-                        process.WaitForExit();
-                        AppendLog(process.StandardOutput.ReadToEnd());
-                        AppendLog("Successfully installed Visual Studio 2022 Community.");
-                        return;
+                        throw new ApplicationException("Visual Studio 2022 is not available on your system.");
+                        //AppendLog("Visual Studio 2022 is not available on your system.");
+                        //AppendLog("Installing the latest version of Visual Studio 2022 Community...");
+                        //string cmd = "winget install --id Microsoft.VisualStudio.2022.Community -e --source winget --override \"--add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeMobile\"";
+                        //AppendLog(cmd);
+                        //process.StartInfo.FileName = "cmd.exe";
+                        //process.StartInfo.Arguments = "/c " + cmd;
+                        //process.StartInfo.UseShellExecute = true;
+                        //process.StartInfo.CreateNoWindow = false;
+                        //process.StartInfo.RedirectStandardInput = false;
+                        //process.StartInfo.RedirectStandardOutput = false;
+
+                        //process.Start();
+                        //process.WaitForExit();
+                        //AppendLog("Completed installing the latest version of Visual Studio 2022 Community...");
                     }
                     File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
                     AppendLog("Found Visual Studio 2022.");
@@ -142,9 +148,10 @@ namespace Installer
                     {
                         AppendLog("Git is not available on your system.");
                         AppendLog("Installing the latest Git...");
-                        AppendLog("winget install --id Git.Git -e --source winget");
+                        string cmd = "winget install --id Git.Git -e --source winget";
+                        AppendLog(cmd);
                         process.StartInfo.FileName = "cmd.exe";
-                        process.StartInfo.Arguments = "/c winget install --id Git.Git -e --source winget";
+                        process.StartInfo.Arguments = "/c " + cmd;
                         process.Start();
                         process.WaitForExit();
                         AppendLog(process.StandardOutput.ReadToEnd());
@@ -182,15 +189,17 @@ namespace Installer
                     {
                         AppendLog("CMake is not available on your system.");
                         AppendLog("Installing the CMake version 3.31.5 ...");
-                        string fileName = "cmake-3.31.5-windows-x86_64.msi";
-                        DownloadFromWeb(DataBase.CMakeUrl, gdkInstallationPath, fileName);
-                        process.StartInfo.FileName = System.IO.Path.Combine(gdkInstallationPath, fileName);
-                        process.StartInfo.RedirectStandardOutput = false;
+                        string cmd = "winget install --id Kitware.CMake --version 3.31.5 -e --source winget";
+                        AppendLog(cmd);
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = "/c " + cmd;
                         process.StartInfo.UseShellExecute = true;
                         process.StartInfo.CreateNoWindow = false;
+                        process.StartInfo.RedirectStandardInput = false;
+                        process.StartInfo.RedirectStandardOutput = false;
+
                         process.Start();
                         process.WaitForExit();
-                        File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
                         AppendLog("Completed installing CMake...");
                         return;
                     }

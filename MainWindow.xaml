@@ -60,7 +60,7 @@
 
                         <!-- Scrollable license text section -->
                         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" Margin="20,200,20,0">
-                            <TextBlock TextWrapping="Wrap" Height="1873">
+                            <TextBlock TextWrapping="Wrap">
 
                         <!-- Insert license text here -->
                         # Copyright © from 2022-present, UNKNOWN STRYKER. All Rights Reserved.<LineBreak/>
