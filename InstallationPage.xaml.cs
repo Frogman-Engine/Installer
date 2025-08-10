@@ -152,9 +152,14 @@ namespace Installer
                         AppendLog(cmd);
                         process.StartInfo.FileName = "cmd.exe";
                         process.StartInfo.Arguments = "/c " + cmd;
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.CreateNoWindow = false;
+                        process.StartInfo.RedirectStandardInput = false;
+                        process.StartInfo.RedirectStandardOutput = false;
+                        process.StartInfo.Verb = "runas";
+
                         process.Start();
                         process.WaitForExit();
-                        AppendLog(process.StandardOutput.ReadToEnd());
                         AppendLog("Successfully installed Git.");
                         return;
                     }
@@ -197,6 +202,7 @@ namespace Installer
                         process.StartInfo.CreateNoWindow = false;
                         process.StartInfo.RedirectStandardInput = false;
                         process.StartInfo.RedirectStandardOutput = false;
+                        process.StartInfo.Verb = "runas";
 
                         process.Start();
                         process.WaitForExit();
