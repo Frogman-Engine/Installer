@@ -32,7 +32,7 @@ namespace Installer
         {
             get { return vswhereUrl; }
         }
-        private static string vswhereOptions = "-products * -requires Microsoft.Component.MSBuild -property installationPath";
+        private static string vswhereOptions = "-property installationPath";
         public static string VsWhereOptions
         {
             get { return vswhereOptions; }
