@@ -13,7 +13,7 @@
     <IncludeSymbols>False</IncludeSymbols>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Title>Installer</Title>
-    <ApplicationIcon>FE Installer 128.ico</ApplicationIcon>
+    <ApplicationIcon>Frogman Engine Installer Transparent.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>$(MSBuildProjectName) Windows 11 Edition</AssemblyName>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="FE Installer 128.ico" />
+    <Content Include="Frogman Engine Installer Transparent.ico" />
   </ItemGroup>
 
 </Project>
