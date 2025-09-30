@@ -8,9 +8,29 @@ using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.TextFormatting;
+using Windows.Devices.Geolocation;
 /*
-Copyright © from 2022 to present, UNKNOWN STRYKER. All Rights Reserved.
-Licensed under the AGPLv3 License. You may not use this file except in compliance with the License.
+ The MIT License
+
+Copyright (c) 2025 by UNKNOWN STRYKER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 */
 
 
@@ -84,7 +104,7 @@ namespace Installer
                     string fileName = "vswhere.exe";
                     Process process = new Process();
 
-                    AppendLog("Checking if Visual Studio 2022 is available on your system...");
+                    AppendLog("Checking if the Visual Studio 2022 is available on your system...");
                     DownloadFromWeb(DataBase.VsWhereUrl, gdkInstallationPath, fileName);
 
                     process.StartInfo = new ProcessStartInfo
@@ -100,7 +120,7 @@ namespace Installer
 
                     if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        throw new ApplicationException("Visual Studio 2022 is not available on your system.");
+                        throw new ApplicationException("The Visual Studio 2022 is not available on your system.");
                         //AppendLog("Visual Studio 2022 is not available on your system.");
                         //AppendLog("Installing the latest version of Visual Studio 2022 Community...");
                         //string cmd = "winget install --id Microsoft.VisualStudio.2022.Community -e --source winget --override \"--add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeMobile\"";
@@ -117,7 +137,7 @@ namespace Installer
                         //AppendLog("Completed installing the latest version of Visual Studio 2022 Community...");
                     }
                     File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
-                    AppendLog("Found Visual Studio 2022.");
+                    AppendLog("Found the Visual Studio 2022.");
                 }
                 catch (Exception e)
                 {
@@ -136,7 +156,7 @@ namespace Installer
                 try
                 {
                     Process process = new Process();
-                    AppendLog("Checking if Git is available on your system...");
+                    AppendLog("Checking if the Git is available on your system...");
                     process.StartInfo = new ProcessStartInfo
                     {
                         FileName = "cmd.exe",
@@ -150,7 +170,7 @@ namespace Installer
 
                     if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("Git is not available on your system.");
+                        AppendLog("The Git is not available on your system.");
                         AppendLog("Installing the latest Git...");
                         string cmd = "winget install --id Git.Git -e --source winget";
                         AppendLog(cmd);
@@ -164,10 +184,10 @@ namespace Installer
 
                         process.Start();
                         process.WaitForExit();
-                        AppendLog("Successfully installed Git.");
+                        AppendLog("Successfully installed the Git.");
                         return;
                     }
-                    AppendLog("Found Git.");
+                    AppendLog("Found the Git.");
                 }
                 catch (Exception e)
                 {
@@ -184,7 +204,7 @@ namespace Installer
             {
                 try
                 {
-                    AppendLog("Checking if CMake is available on your system...");
+                    AppendLog("Checking if the CMake is available on your system...");
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe ";
                     process.StartInfo.Arguments = "/c cmake --version";
@@ -196,7 +216,7 @@ namespace Installer
 
                     if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("CMake is not available on your system.");
+                        AppendLog("The CMake is not available on your system.");
                         AppendLog("Installing the CMake version 3.31.5 ...");
                         string cmd = "winget install --id Kitware.CMake --version 3.31.5 -e --source winget";
                         AppendLog(cmd);
@@ -210,10 +230,10 @@ namespace Installer
 
                         process.Start();
                         process.WaitForExit();
-                        AppendLog("Completed installing CMake...");
+                        AppendLog("Completed installing the CMake...");
                         return;
                     }
-                    AppendLog("Found CMake.");
+                    AppendLog("Found the CMake.");
 
                 }
                 catch (Exception e)
@@ -340,7 +360,9 @@ namespace Installer
             {
                 try
                 {
-                    AppendLog($"Building ImGUI version {DataBase.ImGuiVersion} ...");
+                    DownloadGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
+
+                    AppendLog($"Building the ImGUI version {DataBase.ImGuiVersion} ...");
                     string imguiPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
                                                                 System.IO.Path.Combine(DataBase.FrogmanEngineThirdPartyFolderRelativePath, $"imgui-{DataBase.ImGuiVersion}"));
                     Directory.SetCurrentDirectory(imguiPath);
@@ -354,6 +376,43 @@ namespace Installer
                     };
                     process.Start();
                     process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task DownloadGLFW(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Downloading the GLFW {DataBase.GLFWVersion} ...");
+                    string installPath = Path.Combine(thirdPartyLibrariesPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
+                    string zipFileName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}.zip");
+                    string destFolderName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}");
+
+                    string tmpDir = destFolderName + "tmp";
+
+                    DownloadFromWeb(DataBase.GLFWUrl, installPath, $"glfw-{DataBase.GLFWVersion}.zip");
+                    ZipFile.ExtractToDirectory(zipFileName, tmpDir);
+                    File.Delete(zipFileName);
+
+                    string[] folders = Directory.GetDirectories(tmpDir);
+                    if ( folders.Length > 1 )
+                    {
+                        Directory.Move(tmpDir, destFolderName);
+                        Directory.Delete(tmpDir);
+                        return;
+                    }
+
+                    Directory.Move(folders.First(), destFolderName);
+                    Directory.Delete(tmpDir);
                 }
                 catch (Exception e)
                 {
@@ -398,27 +457,27 @@ namespace Installer
                         CreateNoWindow = false
                     };
 
-                    AppendLog($"Building Frogman Engine Core...");
+                    AppendLog($"Building the Frogman Engine Core...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Core\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
-                    AppendLog($"Building Frogman Engine Framework...");
+                    AppendLog($"Building the Frogman Engine Framework...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Framework\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
-                    AppendLog($"Building Frogman Engine...");
+                    AppendLog($"Building the Frogman Engine...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Engine\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
-                    AppendLog($"Building Frogman Engine Header Tool...");
+                    AppendLog($"Building the Frogman Engine Header Tool...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Header-Tool\\CMake"));
                     process.Start();
                     process.WaitForExit();
 
-                    AppendLog($"Building Frogman Engine Unit Test Cases...");
+                    AppendLog($"Building the Frogman Engine Unit Test Cases...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Tests\\Unit-Tests"));
                     process.Start();
                     process.WaitForExit();
