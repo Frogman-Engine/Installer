@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leeho\\OneDrive\\문서\\GitHub\\Installer\\Installer.csproj",
+      "projectUniqueName": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Installer.csproj",
       "projectName": "Installer Windows 11 Edition",
-      "projectPath": "C:\\Users\\leeho\\OneDrive\\문서\\GitHub\\Installer\\Installer.csproj",
+      "projectPath": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Installer.csproj",
       "packagesPath": "C:\\Users\\leeho\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leeho\\OneDrive\\문서\\GitHub\\Installer\\obj\\",
+      "outputPath": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
