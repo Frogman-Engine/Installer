@@ -1,4 +1,4 @@
-# Frogman Engine Installer 
+# The Frogman Engine Installer 
 The MIT License
 
 Copyright (c) 2025 by UNKNOWN STRYKER
@@ -21,16 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-# Frogman-Engine
-[![License](https://img.shields.io/badge/License-Apache_2.0-red.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Frogman_Engine_Apache-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-x86_64-white.svg)](PLATFORM)
 [![SIMD](https://img.shields.io/badge/SIMD-AVX-blue.svg)](PLATFORM)
 [![SIMD](https://img.shields.io/badge/SIMD-AVX512F-red.svg)](PLATFORM)
 
+# Frogman-Engine
 Copyright © from 2022-present, UNKNOWN STRYKER. All Rights Reserved.  
-Frogman Engine is licensed under the Apache License, version 2.0.  
-This project is under development and may contain some bugs and issues.
-<img width="833" height="835" alt="Frogman Engine Installer Transparent" src="https://github.com/user-attachments/assets/31b93b8a-a5ea-4d42-a88f-bcf50a83f5c9" />
+**The Frogman Engine is licensed under a modified Apache License 2.0.**  
+⚠️ **NOTICE**: The contents of the Frogman Engine repository **MAY NOT BE USED** for **training AI(Artificial Intelligence) models** or **developing any AI(Artificial Intelligence)-relevant products** without prior written permission. Please contact unknownstryker416@gmail.com to request for the permission.  
+The **Frogman Engine Game Development Kit** is **TOTALLY FREE** without any licensing fees if conforming to the **License** and if used for **game development and AI-irrelevant software development**. Otherwise the license fees may apply.
+<img width="833" height="835" alt="Frogman Engine Installer Transparent" src="https://github.com/user-attachments/assets/4f8bb252-cf21-43c2-ae88-b59395a0b116" />
 
 # Frogman Engine Website (incomplete)
 Currently, programming convention is only available.  
