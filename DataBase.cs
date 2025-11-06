@@ -35,23 +35,30 @@ namespace Installer
 {
     class DataBase
     {
-        public static readonly string GDKInstallerVersion = "v2025.02.24";
-        public static readonly string FrogmanEngineThirdPartyFolderRelativePath = "SDK\\Third-Party\\Libraries";
-        public static readonly string FrogmanEngineDeveloperGitHubProfileUrl = "https://github.com/Unknown-Stryker";
-        public static readonly string VsWhereUrl = "https://github.com/microsoft/vswhere/releases/download/3.1.7/vswhere.exe";  
-        public static readonly string VsWhereOptions = "-property installationPath";
-        public static readonly string CMakeUrl = "https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-windows-x86_64.msi";
-        public static readonly string FrogmanEngineGdkReleaseListUrl = "https://api.github.com/repos/Project-Frogman/Frogman-Engine/releases";
+        public static readonly string ABSLVersion = "20250814.1";
+        public static readonly string AssimpVersion = "6.0.2";
+
         public static readonly string BoostUrl = "https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.zip";
         public static readonly string BoostVersion = "1.87.0";
         public static readonly string BoostDebugBuildB2Options = "architecture=x86 address-model=64 link=static runtime-link=static threading=multi variant=debug";
         public static readonly string BoostReleaseBuildB2Options = "architecture=x86 address-model=64 link=static runtime-link=static threading=multi variant=release";
-        public static readonly string ImGuiVersion = "1.91.6";
-        public static readonly string GLFWVersion = "3.4";
-        public static readonly string GLFWUrl = "https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip";
-  
+
+        public static readonly string FrogmanEngineDeveloperGitHubProfileUrl = "https://github.com/Unknown-Stryker";
+        public static readonly string FrogmanEngineGdkReleaseListUrl = "https://api.github.com/repos/Project-Frogman/Frogman-Engine/releases";
+        public static readonly string FrogmanEngineThirdPartyFolderRelativePath = "SDK\\Third-Party\\Libraries";
+
+        public static readonly string GDKInstallerVersion = "v2025.02.24";
         public static readonly string GDKSystemPathVariableNamePrefix = "FROGMAN_GDK_";
         public static readonly string GDKSystemPathVariableNameSuffix = "_PATH";
+        public static readonly string GLFWUrl = "https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip";
+        public static readonly string GLFWVersion = "3.4";
+
+        public static readonly string ImGuiVersion = "1.91.6";
+
+        public static readonly string SIMD_JSON_Version = "4.2.1";
+
+        public static readonly string VsWhereOptions = "-property installationPath";
+        public static readonly string VsWhereUrl = "https://github.com/microsoft/vswhere/releases/download/3.1.7/vswhere.exe";
 
         public static string GenerateGDKSystemPathVariableName(string gdkversion)
         {

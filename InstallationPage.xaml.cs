@@ -303,6 +303,66 @@ namespace Installer
 
         }
 
+        private Task BuildABSL(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Building the absl version {DataBase.ABSLVersion} ...");
+                    string abslPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                             $"abseil-cpp-{DataBase.ABSLVersion}");
+                    Directory.SetCurrentDirectory(abslPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task BuildAssimp(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Building the assimp version {DataBase.AssimpVersion} ...");
+                    string assimpPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                               $"assimp-{DataBase.AssimpVersion}");
+                    Directory.SetCurrentDirectory(assimpPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
         private Task DownloadAndBuildBoostLibraries(string thirdPartyLibrariesPath)
         {
             return Task.Run(() =>
@@ -360,11 +420,9 @@ namespace Installer
             {
                 try
                 {
-                    DownloadGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
-
                     AppendLog($"Building the ImGUI version {DataBase.ImGuiVersion} ...");
                     string imguiPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                                System.IO.Path.Combine(DataBase.FrogmanEngineThirdPartyFolderRelativePath, $"imgui-{DataBase.ImGuiVersion}"));
+                                                              $"imgui-{DataBase.ImGuiVersion}");
                     Directory.SetCurrentDirectory(imguiPath);
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
@@ -393,7 +451,7 @@ namespace Installer
                 try
                 {
                     AppendLog($"Downloading the GLFW {DataBase.GLFWVersion} ...");
-                    string installPath = Path.Combine(thirdPartyLibrariesPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
+                    string installPath = thirdPartyLibrariesPath;
                     string zipFileName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}.zip");
                     string destFolderName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}");
 
@@ -423,6 +481,36 @@ namespace Installer
             });
         }
 
+        private Task BuildSimdJson(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Building the SIMD JSON version {DataBase.SIMD_JSON_Version} ...");
+                    string simdJsonPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                                 $"simdjson-{DataBase.SIMD_JSON_Version}");
+                    Directory.SetCurrentDirectory(simdJsonPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
         private Task BuildThirdPartyLibraries(string gdkInstallationPath)
         {
             return Task.Run(async () =>
@@ -430,8 +518,12 @@ namespace Installer
                 try
                 {
                     string thirdPartyLibrariesPath = System.IO.Path.Combine(gdkInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
+                    await BuildABSL(thirdPartyLibrariesPath);
+                    await BuildAssimp(thirdPartyLibrariesPath);
                     await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
-                    await BuildImGUI(gdkInstallationPath);
+                    await DownloadGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
+                    await BuildImGUI(thirdPartyLibrariesPath);
+                    await BuildSimdJson(thirdPartyLibrariesPath);
                 }
                 catch (Exception e)
                 {
