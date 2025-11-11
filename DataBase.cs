@@ -53,6 +53,8 @@ namespace Installer
         public static readonly string GLFWUrl = "https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip";
         public static readonly string GLFWVersion = "3.4";
 
+        public static readonly string LZ4Version = "1.10.0";
+
         public static readonly string ImGuiVersion = "1.91.6";
 
         public static readonly string SIMD_JSON_Version = "4.2.1";

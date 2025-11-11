@@ -444,33 +444,26 @@ namespace Installer
             });
         }
 
-        private Task DownloadGLFW(string thirdPartyLibrariesPath)
+        private Task BuildGLFW(string thirdPartyLibrariesPath)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    AppendLog($"Downloading the GLFW {DataBase.GLFWVersion} ...");
-                    string installPath = thirdPartyLibrariesPath;
-                    string zipFileName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}.zip");
-                    string destFolderName = Path.Combine(installPath, $"glfw-{DataBase.GLFWVersion}");
-
-                    string tmpDir = destFolderName + "tmp";
-
-                    DownloadFromWeb(DataBase.GLFWUrl, installPath, $"glfw-{DataBase.GLFWVersion}.zip");
-                    ZipFile.ExtractToDirectory(zipFileName, tmpDir);
-                    File.Delete(zipFileName);
-
-                    string[] folders = Directory.GetDirectories(tmpDir);
-                    if ( folders.Length > 1 )
+                    AppendLog($"Building the GLFW version {DataBase.GLFWVersion} ...");
+                    string glfwPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                              $"glfw-{DataBase.GLFWVersion}");
+                    Directory.SetCurrentDirectory(glfwPath);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
                     {
-                        Directory.Move(tmpDir, destFolderName);
-                        Directory.Delete(tmpDir);
-                        return;
-                    }
-
-                    Directory.Move(folders.First(), destFolderName);
-                    Directory.Delete(tmpDir);
+                        FileName = "build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
                 }
                 catch (Exception e)
                 {
@@ -481,16 +474,46 @@ namespace Installer
             });
         }
 
-        private Task BuildSimdJson(string thirdPartyLibrariesPath)
+        private Task BuildLZ4(string thirdPartyLibrariesPath)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    AppendLog($"Building the SIMD JSON version {DataBase.SIMD_JSON_Version} ...");
-                    string simdJsonPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                                 $"simdjson-{DataBase.SIMD_JSON_Version}");
-                    Directory.SetCurrentDirectory(simdJsonPath);
+                    AppendLog($"Building the LZ4 version {DataBase.LZ4Version} ...");
+                    string lz4Path = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                                 $"lz4-{DataBase.LZ4Version}");
+                    Directory.SetCurrentDirectory(lz4Path);
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "build\\cmake\\build.bat",
+                        RedirectStandardOutput = false,
+                        UseShellExecute = true,
+                        CreateNoWindow = false
+                    };
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception e)
+                {
+                    AppendLog(e.Message);
+                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(-1);
+                }
+            });
+        }
+
+        private Task BuildSTB(string thirdPartyLibrariesPath)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    AppendLog($"Building the STB...");
+                    string stbPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
+                                                              $"stb");
+                    Directory.SetCurrentDirectory(stbPath);
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
@@ -521,9 +544,10 @@ namespace Installer
                     await BuildABSL(thirdPartyLibrariesPath);
                     await BuildAssimp(thirdPartyLibrariesPath);
                     await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
-                    await DownloadGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
+                    await BuildGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
                     await BuildImGUI(thirdPartyLibrariesPath);
-                    await BuildSimdJson(thirdPartyLibrariesPath);
+                    await BuildLZ4(thirdPartyLibrariesPath);
+                    await BuildSTB(thirdPartyLibrariesPath);
                 }
                 catch (Exception e)
                 {
