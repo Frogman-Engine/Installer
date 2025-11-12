@@ -583,6 +583,11 @@ namespace Installer
                     process.Start();
                     process.WaitForExit();
 
+                    AppendLog($"Building the Frogman Engine Renderer...");
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Renderer\\CMake"));
+                    process.Start();
+                    process.WaitForExit();
+
                     AppendLog($"Building the Frogman Engine...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Engine\\CMake"));
                     process.Start();
