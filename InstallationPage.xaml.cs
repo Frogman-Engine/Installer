@@ -598,10 +598,10 @@ namespace Installer
                     process.Start();
                     process.WaitForExit();
 
-                    AppendLog($"Building the Frogman Engine Unit Test Cases...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Tests\\Unit-Tests"));
-                    process.Start();
-                    process.WaitForExit();
+                    //AppendLog($"Building the Frogman Engine Unit Test Cases...");
+                    //Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Tests\\Unit-Tests"));
+                    //process.Start();
+                    //process.WaitForExit();
                 }
                 catch (Exception e)
                 {

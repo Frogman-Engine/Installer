@@ -36,7 +36,7 @@ namespace Installer
     class DataBase
     {
         public static readonly string ABSLVersion = "20250814.1";
-        public static readonly string AssimpVersion = "6.0.2";
+        public static readonly string AssimpVersion = "6.0.4";
 
         public static readonly string BoostUrl = "https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.zip";
         public static readonly string BoostVersion = "1.87.0";
@@ -47,7 +47,7 @@ namespace Installer
         public static readonly string FrogmanEngineGdkReleaseListUrl = "https://api.github.com/repos/Project-Frogman/Frogman-Engine/releases";
         public static readonly string FrogmanEngineThirdPartyFolderRelativePath = "SDK\\Third-Party\\Libraries";
 
-        public static readonly string GDKInstallerVersion = "v2025.02.24";
+        public static readonly string GDKInstallerVersion = "v2026.04.05";
         public static readonly string GDKSystemPathVariableNamePrefix = "FROGMAN_GDK_";
         public static readonly string GDKSystemPathVariableNameSuffix = "_PATH";
         public static readonly string GLFWUrl = "https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip";

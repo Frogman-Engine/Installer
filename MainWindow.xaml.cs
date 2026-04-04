@@ -325,7 +325,7 @@ namespace Installer
                 return;
 
             default:
-                messageBoxText = "Frogman Engine GDK Installer: Are you sure you want to terminate the installator?";
+                messageBoxText = "Frogman Engine GDK Installer: Are you sure you want to terminate the installer?";
                 messageBoxResult = MessageBox.Show(messageBoxText, "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 // Handle the user's response.
