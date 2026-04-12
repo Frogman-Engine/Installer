@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\installationpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:installationpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\largepageprivilegehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:largepageprivilegehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\uninstallationpage .xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:uninstallationpage .xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +22,44 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAADABAAAAAAAAAAAkwEcBAABwAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "UninstallationPage .xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml.cs",
+              "RelativeDocumentMoniker": "UninstallationPage .xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml.cs",
+              "RelativeToolTip": "UninstallationPage .xaml.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAtwI4AAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-04T18:09:56.471Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-12T10:45:26.248Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "InstallationPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml.cs",
               "RelativeDocumentMoniker": "InstallationPage.xaml.cs",
               "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml.cs",
               "RelativeToolTip": "InstallationPage.xaml.cs",
-              "ViewState": "AgIAAGsCAAAAAAAAAADwv3wCAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIsCAAAAAAAAAAAcwJoCAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-04T18:07:27.198Z",
+              "WhenOpened": "2026-04-12T10:03:58.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LargePagePrivilegeHelper.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\LargePagePrivilegeHelper.cs",
+              "RelativeDocumentMoniker": "LargePagePrivilegeHelper.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\LargePagePrivilegeHelper.cs",
+              "RelativeToolTip": "LargePagePrivilegeHelper.cs",
+              "ViewState": "AgIAAPMAAAAAAAAAAAAAAAoBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T07:52:07.365Z",
               "EditorCaption": ""
             }
           ]

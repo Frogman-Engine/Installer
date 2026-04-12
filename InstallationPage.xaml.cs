@@ -660,26 +660,46 @@ namespace Installer
                     MessageBox.Show("Download failed!", "download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                     Environment.Exit(-1);
                 }
-                UpdateProgressBar(1);
+                UpdateProgressBar(5);
 
-                await InstallVisualStudio2022(gdkInstallationPath);
-                UpdateProgressBar(2);
 
-                await InstallGit();
-                UpdateProgressBar(4);
-
-                await InstallCMake(gdkInstallationPath);
+                AppendLog("Configuring large page memory support...");
+                if (LargePagePrivilegeHelper.EnsureGranted(out bool rebootRequired, out string err))
+                {
+                    if (rebootRequired)
+                    {
+                        AppendLog("[LargePage] SeLockMemoryPrivilege granted. Reboot required after the installation.");
+                    }
+                    else
+                    {
+                        AppendLog("Windows Large Page already enabled. Skipping...");
+                    }
+                }
+                else
+                {
+                    AppendLog($"[LargePage] Failed ({err}). Falling back to 4KB pages.");
+                }
                 UpdateProgressBar(10);
 
+
+                await InstallVisualStudio2022(gdkInstallationPath);
+                UpdateProgressBar(15);
+
+                await InstallGit();
+                UpdateProgressBar(20);
+
+                await InstallCMake(gdkInstallationPath);
+                UpdateProgressBar(30);
+
                 await DownloadGDK(targetGDK, gdkInstallationPath);
-                UpdateProgressBar(40);
+                UpdateProgressBar(50);
 
                 string gdkPath = System.IO.Path.Combine(gdkInstallationPath, targetGDK.Name);
                 await BuildThirdPartyLibraries(gdkPath);
-                UpdateProgressBar(60);
+                UpdateProgressBar(70);
 
                 await BuildFrogmanGDK(gdkPath);
-                UpdateProgressBar(80);
+                UpdateProgressBar(90);
 
                 // Set PATH environment variable
                 AppendLog("Configurating the Frogman GDK environment...");

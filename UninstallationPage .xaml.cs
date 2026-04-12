@@ -140,7 +140,7 @@ namespace Installer
             try
             {
                 await RemoveGDK(targetGDK);
-                UpdateProgressBar(90);
+                UpdateProgressBar(50);
 
                 UnsetGdkEnvironmentVariable(targetGDK);
                 AppendLog("Successfully uninstalled Frogman Engine GDK!");
