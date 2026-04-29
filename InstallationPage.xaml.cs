@@ -376,7 +376,16 @@ namespace Installer
                     DownloadFromWeb(DataBase.BoostUrl, thirdPartyLibrariesPath, boostZipFileName);
                     ZipFile.ExtractToDirectory(boostZipFilePath, thirdPartyLibrariesPath);
                     File.Delete(boostZipFilePath);
+
+                    string underscored = boostFolderName.Replace('.', '_');
+                    underscored = underscored.Replace('-', '_');
+                    underscored = System.IO.Path.Combine(thirdPartyLibrariesPath, underscored);
+
                     string boostFolderPath = System.IO.Path.Combine(thirdPartyLibrariesPath, boostFolderName);
+                    if (Directory.Exists(underscored))
+                    {
+                        Directory.Move(underscored, boostFolderPath);
+                    }
 
                     Directory.SetCurrentDirectory(boostFolderPath);
                     Process process = new Process();
