@@ -3,12 +3,68 @@
   "WorkspaceRootPath": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\dirconfigpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:dirconfigpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\finalpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:finalpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\installationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:installationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\uninstallationpage .xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:uninstallationpage .xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\uninstaller.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:uninstaller.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\uninstaller.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:uninstaller.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\uninstallationpage .xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:uninstallationpage .xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\license||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:license||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\installationpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:installationpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\finalpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:finalpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\documents\\github\\installer\\dirconfigpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:dirconfigpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,17 +74,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 14,
               "Title": "DataBase.cs",
               "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DataBase.cs",
               "RelativeDocumentMoniker": "DataBase.cs",
               "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DataBase.cs",
               "RelativeToolTip": "DataBase.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAIwC4AAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-27T15:58:08.071Z",
               "IsPinned": true,
@@ -36,13 +92,193 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DirConfigPage.xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DirConfigPage.xaml",
+              "RelativeDocumentMoniker": "DirConfigPage.xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DirConfigPage.xaml",
+              "RelativeToolTip": "DirConfigPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:18:53.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FinalPage.xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\FinalPage.xaml",
+              "RelativeDocumentMoniker": "FinalPage.xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\FinalPage.xaml",
+              "RelativeToolTip": "FinalPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:18:52.466Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UninstallationPage .xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml",
+              "RelativeDocumentMoniker": "UninstallationPage .xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml",
+              "RelativeToolTip": "UninstallationPage .xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:18:19.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Uninstaller.xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Uninstaller.xaml",
+              "RelativeDocumentMoniker": "Uninstaller.xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Uninstaller.xaml",
+              "RelativeToolTip": "Uninstaller.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:18:13.053Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Uninstaller.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Uninstaller.xaml.cs",
+              "RelativeDocumentMoniker": "Uninstaller.xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\Uninstaller.xaml.cs",
+              "RelativeToolTip": "Uninstaller.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:18:07.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:17:44.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InstallationPage.xaml",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml",
+              "RelativeDocumentMoniker": "InstallationPage.xaml",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml",
+              "RelativeToolTip": "InstallationPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-10T17:16:07.164Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\AssemblyInfo.cs",
+              "RelativeToolTip": "AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:16:22.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UninstallationPage .xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml.cs",
+              "RelativeDocumentMoniker": "UninstallationPage .xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\UninstallationPage .xaml.cs",
+              "RelativeToolTip": "UninstallationPage .xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:17:58.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:17:46.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "LICENSE",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\LICENSE",
+              "RelativeDocumentMoniker": "LICENSE",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\LICENSE",
+              "RelativeToolTip": "LICENSE",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-10T17:17:42.137Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:17:12.164Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "FinalPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\FinalPage.xaml.cs",
+              "RelativeDocumentMoniker": "FinalPage.xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\FinalPage.xaml.cs",
+              "RelativeToolTip": "FinalPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:16:48.98Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DirConfigPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DirConfigPage.xaml.cs",
+              "RelativeDocumentMoniker": "DirConfigPage.xaml.cs",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\DirConfigPage.xaml.cs",
+              "RelativeToolTip": "DirConfigPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-10T17:16:36.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "InstallationPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml.cs",
               "RelativeDocumentMoniker": "InstallationPage.xaml.cs",
-              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml.cs*",
-              "RelativeToolTip": "InstallationPage.xaml.cs*",
-              "ViewState": "AgIAAI4BAAAAAAAAAAD4v4IBAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\leeho\\Documents\\GitHub\\Installer\\InstallationPage.xaml.cs",
+              "RelativeToolTip": "InstallationPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-29T07:20:01.044Z",
               "EditorCaption": ""
