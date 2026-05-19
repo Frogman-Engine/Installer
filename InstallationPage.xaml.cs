@@ -310,36 +310,6 @@ namespace Installer
             });
         }
 
-        private Task BuildAssimp(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Building the assimp version {DataBase.AssimpVersion} ...");
-                    string assimpPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                               $"assimp-{DataBase.AssimpVersion}");
-                    Directory.SetCurrentDirectory(assimpPath);
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "build.bat",
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
         private Task DownloadAndBuildBoostLibraries(string thirdPartyLibrariesPath)
         {
             return Task.Run(() =>
@@ -490,36 +460,6 @@ namespace Installer
             });
         }
 
-        private Task BuildSTB(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Building the STB...");
-                    string stbPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                              $"stb");
-                    Directory.SetCurrentDirectory(stbPath);
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "build.bat",
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
         private Task BuildThirdPartyLibraries(string gdkInstallationPath)
         {
             return Task.Run(async () =>
@@ -528,12 +468,10 @@ namespace Installer
                 {
                     string thirdPartyLibrariesPath = System.IO.Path.Combine(gdkInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
                     await BuildABSL(thirdPartyLibrariesPath);
-                    await BuildAssimp(thirdPartyLibrariesPath);
                     await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
                     await BuildGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
                     await BuildImGUI(thirdPartyLibrariesPath);
                     await BuildLZ4(thirdPartyLibrariesPath);
-                    await BuildSTB(thirdPartyLibrariesPath);
                 }
                 catch (Exception e)
                 {
