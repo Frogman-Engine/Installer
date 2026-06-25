@@ -5,7 +5,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.TextFormatting;
 using Windows.Devices.Geolocation;
@@ -15,6 +17,12 @@ using Windows.Devices.Geolocation;
 
 namespace Installer
 {
+    enum VisualStudioVersion
+    {   
+        None = 0,
+        VisualStudio2022 = 17,
+        VisualStudio2026 = 18
+    }
     public partial class InstallationPage : System.Windows.Controls.Page
     {
         public InstallationPage(string appVersion)
@@ -72,49 +80,124 @@ namespace Installer
         }
 
 
-        private Task InstallVisualStudio2022(string gdkInstallationPath)
+        List<string?> versions = new();
+        string buildBatchFileName = String.Empty;
+        VisualStudioVersion visualStudioVersion = VisualStudioVersion.None;
+        public Task RunVisualStudioWhere(string gdkInstallationPath)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 try
                 {
-                    string fileName = "vswhere.exe";
-                    Process process = new Process();
+                    AppendLog("Checking if Visual Studio Community/Pro/Enterprise is available on your system...");
 
-                    AppendLog("Checking if the Visual Studio 2022 is available on your system...");
-                    DownloadFromWeb(DataBase.VsWhereUrl, gdkInstallationPath, fileName);
+                    Process process = new Process();
+                    string fileName = DownloadFromWeb(DataBase.VsWhereUrl, ".", "vswhere.exe");
 
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = System.IO.Path.Combine(gdkInstallationPath, fileName),
+                        FileName = fileName,
                         Arguments = DataBase.VsWhereOptions,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     };
                     process.Start();
+                    string jsonOutput = await process.StandardOutput.ReadToEndAsync();
                     process.WaitForExit();
 
-                    if (process.StandardOutput.ReadToEnd().Length is 0)
-                    {
-                        throw new ApplicationException("The Visual Studio 2022 is not available on your system.");
-                        //AppendLog("Visual Studio 2022 is not available on your system.");
-                        //AppendLog("Installing the latest version of Visual Studio 2022 Community...");
-                        //string cmd = "winget install --id Microsoft.VisualStudio.2022.Community -e --source winget --override \"--add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeMobile\"";
-                        //AppendLog(cmd);
-                        //process.StartInfo.FileName = "cmd.exe";
-                        //process.StartInfo.Arguments = "/c " + cmd;
-                        //process.StartInfo.UseShellExecute = true;
-                        //process.StartInfo.CreateNoWindow = false;
-                        //process.StartInfo.RedirectStandardInput = false;
-                        //process.StartInfo.RedirectStandardOutput = false;
+                    using JsonDocument doc = JsonDocument.Parse(jsonOutput);
 
-                        //process.Start();
-                        //process.WaitForExit();
-                        //AppendLog("Completed installing the latest version of Visual Studio 2022 Community...");
+                    if (jsonOutput.Length is 0 ||
+                        ((doc.RootElement.ValueKind is JsonValueKind.Array) && (doc.RootElement.GetArrayLength() is 0))
+                        )
+                    {
+                        throw new ApplicationException("Visual Studio Community/Pro/Enterprise is not available on your system.");
                     }
-                    File.Delete(System.IO.Path.Combine(gdkInstallationPath, fileName));
-                    AppendLog("Found the Visual Studio 2022.");
+
+                    File.Delete(fileName);
+                    AppendLog("Found Visual Studio Community/Pro/Enterprise.");
+
+                    foreach (JsonElement element in doc.RootElement.EnumerateArray())
+                    {
+                        string? version = element.GetProperty("catalog").GetProperty("productLineVersion").GetString();
+                        switch(version)
+                        {
+                        case "17":
+                        case "2022":
+                            version = "Visual Studio 17 2022";
+                            break;
+
+                        case "18":
+                        case "2026":
+                            version = "Visual Studio 18 2026";
+                            break;
+
+                        default:
+                            break;
+                        }
+
+                        versions.Add(version);
+                    }
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var dialog = new Window
+                        {
+                            Title = "Please choose Visual Studio version",
+                            Width = 300,
+                            Height = 150,
+                            WindowStartupLocation = WindowStartupLocation.CenterScreen
+                        };
+
+                        var panel = new StackPanel();
+
+                        foreach (var version in versions)
+                        {
+                            var button = new Button
+                            {
+                                Content = version,
+                                Margin = new Thickness(5),
+                                Tag = version,
+                                Height = 25
+                            };
+              
+
+                            button.Click += (s, e) =>
+                            {
+                                dialog.Tag = ((Button)s).Tag;
+                                dialog.DialogResult = true;
+                                dialog.Close();
+                            };
+
+                            panel.Children.Add(button);
+                        }
+
+                        dialog.Content = panel;
+
+                        if (dialog.ShowDialog() == true)
+                        {
+                            string? selectedVersion = dialog.Tag?.ToString();
+                            Debug.Assert(selectedVersion is not null);
+                            switch (selectedVersion)
+                            {
+                                case "Visual Studio 17 2022":
+                                    buildBatchFileName = "build-with-vs2022.bat";
+                                    visualStudioVersion = VisualStudioVersion.VisualStudio2022;
+                                    break;
+
+                                case "Visual Studio 18 2026":
+                                    buildBatchFileName = "build-with-vs2026.bat";
+                                    visualStudioVersion = VisualStudioVersion.VisualStudio2026;
+                                    break;
+
+                                default:
+                                    Debug.Assert(false, "No Default!");
+                                    break;
+                            }
+                            MessageBox.Show($"{selectedVersion}", "Selected version:");
+                        }
+                    });
                 }
                 catch (Exception e)
                 {
@@ -133,7 +216,7 @@ namespace Installer
                 try
                 {
                     Process process = new Process();
-                    AppendLog("Checking if the Git is available on your system...");
+                    AppendLog("Checking if Git is available on your system...");
                     process.StartInfo = new ProcessStartInfo
                     {
                         FileName = "cmd.exe",
@@ -147,7 +230,7 @@ namespace Installer
 
                     if (process.StandardOutput.ReadToEnd().Length is 0)
                     {
-                        AppendLog("The Git is not available on your system.");
+                        AppendLog("Git is not available on your system.");
                         AppendLog("Installing the latest Git...");
                         string cmd = "winget install --id Git.Git -e --source winget";
                         AppendLog(cmd);
@@ -161,10 +244,10 @@ namespace Installer
 
                         process.Start();
                         process.WaitForExit();
-                        AppendLog("Successfully installed the Git.");
+                        AppendLog("Successfully installed Git.");
                         return;
                     }
-                    AppendLog("Found the Git.");
+                    AppendLog("Found Git.");
                 }
                 catch (Exception e)
                 {
@@ -181,7 +264,7 @@ namespace Installer
             {
                 try
                 {
-                    AppendLog("Checking if the CMake is available on your system...");
+                    AppendLog("Checking if CMake is available on your system...");
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe ";
                     process.StartInfo.Arguments = "/c cmake --version";
@@ -191,11 +274,18 @@ namespace Installer
                     process.Start();
                     process.WaitForExit();
 
-                    if (process.StandardOutput.ReadToEnd().Length is 0)
+                    string response = process.StandardOutput.ReadToEnd();
+                    if (response.Contains("cmake version 4.2") is false)
                     {
-                        AppendLog("The CMake is not available on your system.");
-                        AppendLog("Installing the CMake version 3.31.5 ...");
-                        string cmd = "winget install --id Kitware.CMake --version 3.31.5 -e --source winget";
+                        AppendLog("CMake 4.2.0 is not available on your system.");
+                        AppendLog("Installing the CMake version 4.2.0 ...");
+
+                        string cmd = String.Empty;
+                        if (response.Length > 0)
+                        {
+                            cmd = "winget uninstall Kitware.CMake && ";
+                        }
+                        cmd += "winget install --id Kitware.CMake --version 4.2.0 -e --source winget";
                         AppendLog(cmd);
                         process.StartInfo.FileName = "cmd.exe";
                         process.StartInfo.Arguments = "/c " + cmd;
@@ -207,10 +297,10 @@ namespace Installer
 
                         process.Start();
                         process.WaitForExit();
-                        AppendLog("Completed installing the CMake...");
+                        AppendLog("Completed installing CMake...");
                         return;
                     }
-                    AppendLog("Found the CMake.");
+                    AppendLog("Found CMake.");
 
                 }
                 catch (Exception e)
@@ -291,9 +381,10 @@ namespace Installer
                                                              $"abseil-cpp-{DataBase.ABSLVersion}");
                     Directory.SetCurrentDirectory(abslPath);
                     Process process = new Process();
+
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "build.bat",
+                        FileName = buildBatchFileName,
                         RedirectStandardOutput = false,
                         UseShellExecute = true,
                         CreateNoWindow = false
@@ -349,6 +440,18 @@ namespace Installer
 
                     process.StartInfo.FileName = "b2.exe";
                     process.StartInfo.Arguments = DataBase.BoostDebugBuildB2Options;
+                    process.StartInfo.Arguments += " ";
+                    switch (visualStudioVersion)
+                    {
+                        case VisualStudioVersion.VisualStudio2022:
+                            process.StartInfo.Arguments += "toolset=msvc-14.3";
+                            break;
+
+                        case VisualStudioVersion.VisualStudio2026:
+                            process.StartInfo.Arguments += "toolset=msvc-14.5";
+                            break;
+                    }
+
                     process.StartInfo.RedirectStandardOutput = false;
                     process.StartInfo.UseShellExecute = true;
                     process.StartInfo.CreateNoWindow = false;
@@ -357,6 +460,18 @@ namespace Installer
                     process.WaitForExit();
 
                     process.StartInfo.Arguments = DataBase.BoostReleaseBuildB2Options;
+                    process.StartInfo.Arguments += " ";
+                    switch (visualStudioVersion)
+                    {
+                        case VisualStudioVersion.VisualStudio2022:
+                            process.StartInfo.Arguments += "toolset=msvc-14.3";
+                            break;
+
+                        case VisualStudioVersion.VisualStudio2026:
+                            process.StartInfo.Arguments += "toolset=msvc-14.5";
+                            break;
+                    }
+
                     AppendLog($"Building release version of the Boost libraries with {process.StartInfo.Arguments} ...");
                     process.Start();
                     process.WaitForExit();
@@ -383,7 +498,7 @@ namespace Installer
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "build.bat",
+                        FileName = buildBatchFileName,
                         RedirectStandardOutput = false,
                         UseShellExecute = true,
                         CreateNoWindow = false
@@ -413,7 +528,7 @@ namespace Installer
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "build.bat",
+                        FileName = buildBatchFileName,
                         RedirectStandardOutput = false,
                         UseShellExecute = true,
                         CreateNoWindow = false
@@ -439,11 +554,11 @@ namespace Installer
                     AppendLog($"Building the LZ4 version {DataBase.LZ4Version} ...");
                     string lz4Path = System.IO.Path.Combine(thirdPartyLibrariesPath,
                                                                  $"lz4-{DataBase.LZ4Version}");
-                    Directory.SetCurrentDirectory(lz4Path);
+                    Directory.SetCurrentDirectory( Path.Combine(lz4Path, "build\\cmake") );
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "build\\cmake\\build.bat",
+                        FileName = buildBatchFileName,
                         RedirectStandardOutput = false,
                         UseShellExecute = true,
                         CreateNoWindow = false
@@ -491,11 +606,16 @@ namespace Installer
                     Process process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
-                        FileName = "build.bat",
+                        FileName = buildBatchFileName,
                         RedirectStandardOutput = false,
                         UseShellExecute = true,
                         CreateNoWindow = false
                     };
+
+                    AppendLog($"Building the Frogman Engine Audio...");
+                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Audio\\CMake"));
+                    process.Start();
+                    process.WaitForExit();
 
                     AppendLog($"Building the Frogman Engine Core...");
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Core\\CMake"));
@@ -521,11 +641,6 @@ namespace Installer
                     Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Header-Tool\\CMake"));
                     process.Start();
                     process.WaitForExit();
-
-                    //AppendLog($"Building the Frogman Engine Unit Test Cases...");
-                    //Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Tests\\Unit-Tests"));
-                    //process.Start();
-                    //process.WaitForExit();
                 }
                 catch (Exception e)
                 {
@@ -605,10 +720,6 @@ namespace Installer
                 }
                 UpdateProgressBar(10);
 
-
-                await InstallVisualStudio2022(gdkInstallationPath);
-                UpdateProgressBar(15);
-
                 await InstallGit();
                 UpdateProgressBar(20);
 
@@ -643,7 +754,7 @@ namespace Installer
 
         private HttpClient httpClient;
         private ProductInfoHeaderValue userAgentHeader;
-        private void DownloadFromWeb(string webUrl, string desinationPath, string fileNameWithExtension)
+        private string DownloadFromWeb(string webUrl, string desinationPath, string fileNameWithExtension)
         {
             try
             {
@@ -664,17 +775,19 @@ namespace Installer
 
                 // Read the response content as a stream and write it to the file.
                 Stream responseStream = response.Content.ReadAsStreamAsync().Result;
-                FileStream fileStream = new FileStream(System.IO.Path.Combine(desinationPath, fileNameWithExtension), FileMode.Create, FileAccess.Write, FileShare.None);
+                using FileStream fileStream = new FileStream(System.IO.Path.Combine(desinationPath, fileNameWithExtension), FileMode.Create, FileAccess.Write, FileShare.None);
                 responseStream.CopyTo(fileStream);
 
                 fileStream.Close();
                 responseStream.Close();
+                return fileStream.Name;
             }
             catch (Exception e)
             {
                 AppendLog(e.Message);
                 MessageBox.Show("Download Failed!", "Download Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.FailFast(e.Message);
+                return string.Empty;
             }
         }
     }

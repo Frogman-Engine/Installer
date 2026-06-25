@@ -267,6 +267,7 @@ namespace Installer
                 return;
 
             case InstallationPage:
+                await installationStage.RunVisualStudioWhere(dirConfigStage.InstallationPathTextBox.Text);
                 await installationStage.Install(dirConfigStage.TargetSDK, dirConfigStage.InstallationPathTextBox.Text);
                 NextButton.Visibility = Visibility.Visible;
                 ToNextButtonText = "Complete";

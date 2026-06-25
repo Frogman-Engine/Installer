@@ -24,7 +24,9 @@ namespace Installer
         public static readonly string FrogmanEngineGdkReleaseListUrl = "https://api.github.com/repos/UnknownStryker-Interactive-Technologies/Frogman-Engine/releases";
         public static readonly string FrogmanEngineThirdPartyFolderRelativePath = "SDK\\Third-Party\\Libraries";
 
-        public static readonly string GDKInstallerVersion = "v2026.04.28";
+        public static readonly string GDKInstallerVersion = "v2026.06.26";
+        public static readonly string GDKInstallerPublishDate = "2026-06-26T00:00:00Z";
+
         public static readonly string GDKSystemPathVariableNamePrefix = "FROGMAN_GDK_";
         public static readonly string GDKSystemPathVariableNameSuffix = "_PATH";
         public static readonly string GLFWUrl = "https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip";
@@ -34,7 +36,7 @@ namespace Installer
 
         public static readonly string ImGuiVersion = "1.91.6";
 
-        public static readonly string VsWhereOptions = "-property installationPath";
+        public static readonly string VsWhereOptions = "-products * -format json";
         public static readonly string VsWhereUrl = "https://github.com/microsoft/vswhere/releases/download/3.1.7/vswhere.exe";
 
         public static string GenerateGDKSystemPathVariableName(string gdkversion)

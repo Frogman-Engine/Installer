@@ -19,7 +19,7 @@ namespace Installer
         }
 
 
-        public void OnClickDisplaySdkVersionList(object sender, RoutedEventArgs e)
+        public void OnClickDisplayGdkVersionList(object sender, RoutedEventArgs e)
         {
             SdkVersionListBox.Items.Clear();
 
