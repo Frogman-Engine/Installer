@@ -81,6 +81,14 @@ namespace Installer
             {
                 foreach (Release release in releases)
                 {
+                    Debug.Assert(release.PublishedAt is not null);
+                    // Compare the published date of the release with the installer version to filter out older versions
+                    // lexicographically compare: release.PublishedAt < DataBase.GDKInstallerVersion
+                    if (String.Compare(release.PublishedAt, DataBase.GDKInstallerPublishDate) == -1)
+                    {
+                        continue;
+                    }
+
                     Debug.Assert(release.Tag is not null);
                     string productInfo = $"Github Branch:  {release.ProductBranch}\n";
                     productInfo += $"Is Pre-Release:  {release.PreRelease}\n";
