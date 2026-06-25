@@ -15,7 +15,7 @@
         <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDKs have been found. " FontSize="16" FontWeight="Bold" Margin="22,155,20,360"/>
 
 
-        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplaySdkVersionList">
+        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplayGdkVersionList">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ListBox x:Name="SdkVersionListBox" SelectionChanged="OnSelectSdkVersion">
                 </ListBox>
