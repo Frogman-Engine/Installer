@@ -275,7 +275,7 @@ namespace Installer
                     process.WaitForExit();
 
                     string response = process.StandardOutput.ReadToEnd();
-                    if (response.Contains("cmake version 4.2") is false)
+                    if (response.Contains("cmake version 4.2.0") is false)
                     {
                         AppendLog("CMake 4.2.0 is not available on your system.");
                         AppendLog("Installing the CMake version 4.2.0 ...");
