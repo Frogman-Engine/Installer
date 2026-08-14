@@ -37,9 +37,9 @@
             </Border.Background>
         </Border>
 
-        <TextBlock TextWrapping="Wrap" Text="Frogman Engine GDK" Foreground="LightGray" FontSize="32" FontWeight="Bold" Margin="30,100,0,371"/>
+        <TextBlock TextWrapping="Wrap" Text="Frogman Engine GDK" Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontSize="32" FontWeight="Bold" Margin="30,100,0,371"/>
 
-        <TextBlock TextWrapping="Wrap" Foreground="LightGray" FontSize="8" FontWeight="Bold" Margin="15,49,15,2" Grid.Row="1" Grid.RowSpan="2">
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontSize="8" FontWeight="Bold" Margin="15,49,15,2" Grid.Row="1" Grid.RowSpan="2">
         By Unknown Stryker<LineBreak/>
         GitHub: https://github.com/Unknown-Stryker
         </TextBlock>
@@ -48,7 +48,7 @@
 
 
         <!-- Main contents area -->
-        <Grid Grid.Column="1" Margin="0,0,0,10" Grid.RowSpan="3" Background="White">
+        <Grid Grid.Column="1" Margin="0,0,0,10" Grid.RowSpan="3" Background="{DynamicResource ApplicationBackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -56,10 +56,10 @@
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden">
                 <Frame.Content>
                     <Grid>
-                        <TextBlock TextWrapping="Wrap" Text="The License Agreement" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
+                        <TextBlock TextWrapping="Wrap" Text="The License Agreement" FontSize="32" FontWeight="Bold" Margin="20,100,20,415" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
                         <!-- Scrollable license text section -->
-                        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" Margin="20,200,20,0">
+                        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" Margin="20,200,20,0" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                             <TextBlock TextWrapping="Wrap">
 
                         <!-- Insert license text here -->
@@ -189,8 +189,8 @@ See the License for the specific language governing permissions and limitations 
 
             <!-- buttons -->
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button x:Name="NextButton" Content="{Binding Path=ToNextButtonText, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25" Margin="5" Click="OnClickGoNext"/>
-                <Button x:Name="PreviousButton" Content="{Binding Path=ToPreviousButtonText, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25" Margin="5" Click="OnClickGoBack"/>
+                <Button x:Name="NextButton" Content="{Binding Path=ToNextButtonText, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="5" Click="OnClickGoNext"/>
+                <Button x:Name="PreviousButton" Content="{Binding Path=ToPreviousButtonText, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="5" Click="OnClickGoBack"/>
             </StackPanel>
 
         </Grid>

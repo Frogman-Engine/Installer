@@ -144,10 +144,27 @@ namespace Installer
                     {
                         var dialog = new Window
                         {
-                            Title = "Please choose Visual Studio version",
-                            Width = 300,
-                            Height = 150,
-                            WindowStartupLocation = WindowStartupLocation.CenterScreen
+                            Title = "Choose Visual Studio Version",
+                            Width = 250,
+                            Height = 125,
+                            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                            ResizeMode = ResizeMode.NoResize
+                        };
+
+                        bool closingBySelection = false;
+                        dialog.Closing += (s, e) =>
+                        {
+                            if (closingBySelection == true)
+                            {
+                                return;
+                            }
+
+                            e.Cancel = true;
+                            var messageBoxResult = MessageBox.Show("Frogman Engine GDK Installer: Are you sure you want to terminate the installer?", "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            if (messageBoxResult is MessageBoxResult.Yes)
+                            {
+                                Environment.Exit(0);
+                            }
                         };
 
                         var panel = new StackPanel();
@@ -159,12 +176,14 @@ namespace Installer
                                 Content = version,
                                 Margin = new Thickness(5),
                                 Tag = version,
-                                Height = 25
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center
                             };
               
 
                             button.Click += (s, e) =>
                             {
+                                closingBySelection = true;
                                 dialog.Tag = ((Button)s).Tag;
                                 dialog.DialogResult = true;
                                 dialog.Close();

@@ -8,10 +8,10 @@
       d:DesignWidth="1280" d:DesignHeight="720"
       Title="Frogman Engine GDK Installer" 
       Width="1280" Height="720">
-    
 
-    <Grid Background="White">
-        <TextBlock TextWrapping="Wrap" Text="Installing the Frogman Engine GDK...!" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
+
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
+        <TextBlock TextWrapping="Wrap" Text="Installing the Frogman Engine GDK...!" FontSize="32" FontWeight="Bold" Margin="20,100,20,415" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
         
         <ProgressBar x:Name="InstallationProgressBar" Minimum="0" Maximum="100" Height="20" VerticalAlignment="Top" Margin="22,170,558,0">
             <ProgressBar.Foreground>

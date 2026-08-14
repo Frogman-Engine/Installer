@@ -10,12 +10,12 @@
       Width="1280" Height="720">
 
 
-    <Grid Background="White">
-        <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine GDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
-        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDKs have been found. " FontSize="16" FontWeight="Bold" Margin="22,155,20,360"/>
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
+        <TextBlock TextWrapping="Wrap" Text="Uninstall Frogman Engine GDK" FontSize="32" FontWeight="Bold" Margin="20,100,20,415" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+        <TextBlock TextWrapping="Wrap" Text="One or more versions of Frogman Engine GDKs have been found. " FontSize="16" FontWeight="Bold" Margin="22,155,20,360" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
 
-        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplayGdkVersionList">
+        <Expander Header="GDK Versions" VerticalAlignment="Top" HorizontalAlignment="Left" Width="700" Margin="22,240,0,0" Expanded="OnClickDisplayGdkVersionList" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ListBox x:Name="SdkVersionListBox" SelectionChanged="OnSelectSdkVersion">
                 </ListBox>

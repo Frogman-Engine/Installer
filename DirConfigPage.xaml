@@ -10,13 +10,13 @@
       Width="1280" Height="720">
 
 
-    <Grid Background="White">
-        <TextBlock TextWrapping="Wrap" Text="Set Installation Path" FontSize="32" FontWeight="Bold" Margin="20,100,20,415"/>
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
+        <TextBlock TextWrapping="Wrap" Text="Set Installation Path" FontSize="32" FontWeight="Bold" Margin="20,100,20,415" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
 
         <StackPanel Orientation="Horizontal" Margin="20,-300,0,0">
-            <TextBox x:Name="InstallationPathTextBox" FontSize="16" VerticalAlignment="Center" Height="25" Width="400" />
-            <Button Content="Browse..." FontSize="16" VerticalAlignment="Center" Click="OnClickBrowseButton" Height="25" Width="100" Margin="10,0,0,0" />
+            <TextBox x:Name="InstallationPathTextBox" FontSize="16" VerticalAlignment="Center" Width="400" />
+            <Button Content="Browse..." FontSize="16" VerticalAlignment="Center" Click="OnClickBrowseButton" Width="100" Margin="10,0,0,0" />
         </StackPanel>
 
 
