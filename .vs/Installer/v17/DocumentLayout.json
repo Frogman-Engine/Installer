@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\onedrive\\\uBB38\uC11C\\github\\installer\\installer.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:installer.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|c:\\users\\leeho\\onedrive\\\uBB38\uC11C\\github\\installer\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{5567BF4E-E1BE-46D8-9D46-2116F43383EA}|Installer.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -51,6 +55,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Installer",
+              "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\Installer.csproj",
+              "RelativeDocumentMoniker": "Installer.csproj",
+              "ToolTip": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\Installer.csproj",
+              "RelativeToolTip": "Installer.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-08T11:23:31.106Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
@@ -62,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
@@ -74,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Uninstaller.xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\Uninstaller.xaml",
               "RelativeDocumentMoniker": "Uninstaller.xaml",
@@ -85,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "InstallationPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\InstallationPage.xaml.cs",
               "RelativeDocumentMoniker": "InstallationPage.xaml.cs",
@@ -97,7 +113,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "UninstallationPage .xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\UninstallationPage .xaml",
               "RelativeDocumentMoniker": "UninstallationPage .xaml",
@@ -108,7 +124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "InstallationPage.xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\InstallationPage.xaml",
               "RelativeDocumentMoniker": "InstallationPage.xaml",
@@ -119,7 +135,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "FinalPage.xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\FinalPage.xaml",
               "RelativeDocumentMoniker": "FinalPage.xaml",
@@ -130,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "DirConfigPage.xaml",
               "DocumentMoniker": "C:\\Users\\leeho\\OneDrive\\\uBB38\uC11C\\GitHub\\Installer\\DirConfigPage.xaml",
               "RelativeDocumentMoniker": "DirConfigPage.xaml",

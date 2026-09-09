@@ -38,8 +38,4 @@
     <Content Include="Frogman Engine Installer Transparent.ico" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FrogmanEngine.Installer.ScriptInterface" Version="0.0.1" />
-  </ItemGroup>
-
 </Project>

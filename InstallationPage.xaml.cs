@@ -1,10 +1,12 @@
 ﻿#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+using Installer.Script;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,12 +19,6 @@ using Windows.Devices.Geolocation;
 
 namespace Installer
 {
-    enum VisualStudioVersion
-    {   
-        None = 0,
-        VisualStudio2022 = 17,
-        VisualStudio2026 = 18
-    }
     public partial class InstallationPage : System.Windows.Controls.Page
     {
         public InstallationPage(string appVersion)
@@ -43,8 +39,11 @@ namespace Installer
         }
 
         DoubleAnimation progressBarAnimation;
+        double currentProgress = 0.0;
+        const double maxProgress = 100.0;
         public void UpdateProgressBar(double progress)
         {
+            this.currentProgress = progress;
             if (InstallationProgressBar.Dispatcher.CheckAccess())
             {
                 progressBarAnimation.From = InstallationProgressBar.Value;
@@ -82,6 +81,7 @@ namespace Installer
 
         List<string?> versions = new();
         string buildBatchFileName = String.Empty;
+#pragma warning disable CS0414
         VisualStudioVersion visualStudioVersion = VisualStudioVersion.None;
         public Task RunVisualStudioWhere(string gdkInstallationPath)
         {
@@ -389,285 +389,65 @@ namespace Installer
 
         }
 
-        private Task BuildABSL(string thirdPartyLibrariesPath)
+        private async Task RunBuildScript(string gdkInstallationPath)
         {
-            return Task.Run(() =>
+            AppendLog($"\n\nLoading the installation script.\n");
+            string dllPath = Path.Combine(gdkInstallationPath, DataBase.GdkInstallScriptDllPathFromGdkRoot);
+            string pdbPath = Path.ChangeExtension(dllPath, ".pdb");
+
+            byte[] dll = File.ReadAllBytes(dllPath);
+            byte[] pdb = File.ReadAllBytes(pdbPath);
+            Assembly assembly = Assembly.Load(dll, pdb);
+
+            Type[] candidates = assembly.GetTypes()
+                .Where(type => type.IsPublic && (type.IsAbstract is false) && type.IsSubclassOf(typeof(ScriptMain)))
+                .ToArray();
+
+            foreach (Type type in assembly.GetTypes())
+            {
+                AppendLog($"{type.FullName} public={type.IsPublic} base={type.BaseType?.AssemblyQualifiedName}");
+            }
+
+            if (candidates.Length is not 1)
+            {
+                string errMsg = "Installation Failed! Installer.ScriptMain.ScheduleJobs(Script.JobParameters)'s implementation is undefined and is not overriden or, more than one definitions of Installer.ScriptMain.ScheduleJobs(Script.JobParameters) coexists.";
+                AppendLog(errMsg);
+                MessageBox.Show(errMsg, "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(-1);
+            }
+
+
+            ScriptMain script = (ScriptMain)Activator.CreateInstance(candidates[0])!;
+            Installer.Script.JobParameters jobParameters = new Installer.Script.JobParameters
+            {
+                BuildBatchFileName = buildBatchFileName,
+                VisualStudioVersion = visualStudioVersion,
+                GdkInstallationPath = gdkInstallationPath
+            };
+
+            Queue<Job> queue = script.ScheduleJobs(jobParameters);
+            AppendLog($"\nLoaded {queue.Count} jobs from the installation script.\n");
+
+            double remainingProgress = maxProgress - currentProgress;
+            double progressPerJob = remainingProgress / queue.Count;
+            
+            while (queue.Count > 0)
             {
                 try
                 {
-                    AppendLog($"Building the absl version {DataBase.ABSLVersion} ...");
-                    string abslPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                             $"abseil-cpp-{DataBase.ABSLVersion}");
-                    Directory.SetCurrentDirectory(abslPath);
-                    Process process = new Process();
-
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = buildBatchFileName,
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
+                    Job job = queue.Dequeue();
+                    AppendLog(job.DisplayedMessage);
+                    // Run the synchronous Job.Run on a background thread and await its completion.
+                    await Task.Run(() => job.Run(jobParameters));
+                    UpdateProgressBar(currentProgress + progressPerJob);
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     AppendLog(e.Message);
                     MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                     Environment.Exit(-1);
                 }
-            });
-        }
-
-        private Task DownloadAndBuildBoostLibraries(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Downloading the Boost libraries v{DataBase.BoostVersion} ...");
-                    string boostFolderName = $"boost-{DataBase.BoostVersion}";
-                    string boostZipFileName = boostFolderName + ".zip";
-                    string boostZipFilePath = System.IO.Path.Combine(thirdPartyLibrariesPath, boostZipFileName);
-                    DownloadFromWeb(DataBase.BoostUrl, thirdPartyLibrariesPath, boostZipFileName);
-                    ZipFile.ExtractToDirectory(boostZipFilePath, thirdPartyLibrariesPath);
-                    File.Delete(boostZipFilePath);
-
-                    string underscored = boostFolderName.Replace('.', '_');
-                    underscored = underscored.Replace('-', '_');
-                    underscored = System.IO.Path.Combine(thirdPartyLibrariesPath, underscored);
-
-                    string boostFolderPath = System.IO.Path.Combine(thirdPartyLibrariesPath, boostFolderName);
-                    if (Directory.Exists(underscored))
-                    {
-                        Directory.Move(underscored, boostFolderPath);
-                    }
-
-                    Directory.SetCurrentDirectory(boostFolderPath);
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "bootstrap.bat",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                    AppendLog(process.StandardOutput.ReadToEnd());
-
-                    process.StartInfo.FileName = "b2.exe";
-                    process.StartInfo.Arguments = DataBase.BoostDebugBuildB2Options;
-                    process.StartInfo.Arguments += " ";
-                    switch (visualStudioVersion)
-                    {
-                        case VisualStudioVersion.VisualStudio2022:
-                            process.StartInfo.Arguments += "toolset=msvc-14.3";
-                            break;
-
-                        case VisualStudioVersion.VisualStudio2026:
-                            process.StartInfo.Arguments += "toolset=msvc-14.5";
-                            break;
-                    }
-
-                    process.StartInfo.RedirectStandardOutput = false;
-                    process.StartInfo.UseShellExecute = true;
-                    process.StartInfo.CreateNoWindow = false;
-                    AppendLog($"Building debug version of the Boost libraries with {process.StartInfo.Arguments} ...");
-                    process.Start();
-                    process.WaitForExit();
-
-                    process.StartInfo.Arguments = DataBase.BoostReleaseBuildB2Options;
-                    process.StartInfo.Arguments += " ";
-                    switch (visualStudioVersion)
-                    {
-                        case VisualStudioVersion.VisualStudio2022:
-                            process.StartInfo.Arguments += "toolset=msvc-14.3";
-                            break;
-
-                        case VisualStudioVersion.VisualStudio2026:
-                            process.StartInfo.Arguments += "toolset=msvc-14.5";
-                            break;
-                    }
-
-                    AppendLog($"Building release version of the Boost libraries with {process.StartInfo.Arguments} ...");
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
-        private Task BuildImGUI(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Building the ImGUI version {DataBase.ImGuiVersion} ...");
-                    string imguiPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                              $"imgui-{DataBase.ImGuiVersion}");
-                    Directory.SetCurrentDirectory(imguiPath);
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = buildBatchFileName,
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
-        private Task BuildGLFW(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Building the GLFW version {DataBase.GLFWVersion} ...");
-                    string glfwPath = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                              $"glfw-{DataBase.GLFWVersion}");
-                    Directory.SetCurrentDirectory(glfwPath);
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = buildBatchFileName,
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
-        private Task BuildLZ4(string thirdPartyLibrariesPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    AppendLog($"Building the LZ4 version {DataBase.LZ4Version} ...");
-                    string lz4Path = System.IO.Path.Combine(thirdPartyLibrariesPath,
-                                                                 $"lz4-{DataBase.LZ4Version}");
-                    Directory.SetCurrentDirectory( Path.Combine(lz4Path, "build\\cmake") );
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = buildBatchFileName,
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
-        private Task BuildThirdPartyLibraries(string gdkInstallationPath)
-        {
-            return Task.Run(async () =>
-            {
-                try
-                {
-                    string thirdPartyLibrariesPath = System.IO.Path.Combine(gdkInstallationPath, DataBase.FrogmanEngineThirdPartyFolderRelativePath);
-                    await BuildABSL(thirdPartyLibrariesPath);
-                    await DownloadAndBuildBoostLibraries(thirdPartyLibrariesPath);
-                    await BuildGLFW(thirdPartyLibrariesPath); // ImGUI build fails if the GLFW does not exist.
-                    await BuildImGUI(thirdPartyLibrariesPath);
-                    await BuildLZ4(thirdPartyLibrariesPath);
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
-        }
-
-        private Task BuildFrogmanGDK(string gdkInstallationPath)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        FileName = buildBatchFileName,
-                        RedirectStandardOutput = false,
-                        UseShellExecute = true,
-                        CreateNoWindow = false
-                    };
-
-                    AppendLog($"Building the Frogman Engine Audio...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Audio\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-
-                    AppendLog($"Building the Frogman Engine Core...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Core\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-
-                    AppendLog($"Building the Frogman Engine Framework...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Framework\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-
-                    AppendLog($"Building the Frogman Engine Renderer...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Renderer\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-
-                    AppendLog($"Building the Frogman Engine...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Engine\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-
-                    AppendLog($"Building the Frogman Engine Header Tool...");
-                    Directory.SetCurrentDirectory(System.IO.Path.Combine(gdkInstallationPath, "SDK\\Header-Tool\\CMake"));
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    AppendLog(e.Message);
-                    MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(-1);
-                }
-            });
+            }
         }
 
         private void SetGdkEnvironmentVariable(Release targetGDK, string gdkPath)
@@ -740,20 +520,16 @@ namespace Installer
                 UpdateProgressBar(10);
 
                 await InstallGit();
-                UpdateProgressBar(20);
+                UpdateProgressBar(15);
 
                 await InstallCMake(gdkInstallationPath);
-                UpdateProgressBar(30);
+                UpdateProgressBar(20);
 
                 await DownloadGDK(targetGDK, gdkInstallationPath);
-                UpdateProgressBar(50);
+                UpdateProgressBar(30);
 
                 string gdkPath = System.IO.Path.Combine(gdkInstallationPath, targetGDK.Name);
-                await BuildThirdPartyLibraries(gdkPath);
-                UpdateProgressBar(70);
-
-                await BuildFrogmanGDK(gdkPath);
-                UpdateProgressBar(90);
+                await RunBuildScript(gdkPath);
 
                 // Set PATH environment variable
                 AppendLog("Configurating the Frogman GDK environment...");

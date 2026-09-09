@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows;
+using Installer;
 
 
 
@@ -45,12 +46,12 @@ namespace Installer
             InitializeComponent();
 
             this.httpClient = new HttpClient();
-            this.userAgentHeader = new ProductInfoHeaderValue("Frogman_Engine_SDK_Installer", appVersion);
+            this.userAgentHeader = new ProductInfoHeaderValue("Frogman_Engine_GDK_Installer", appVersion);
 
             // Add a User-Agent header to the HttpClient instance. UserAgent is a metada that identifies the client application.
             this.httpClient.DefaultRequestHeaders.UserAgent.Add(userAgentHeader);
 
-            this.url = DataBase.FrogmanEngineGdkReleaseListUrl;
+            this.url = Installer.DataBase.FrogmanEngineGdkReleaseListUrl;
 
             releases = FetchSdkVersionListFromGitHub();
 

@@ -13,8 +13,12 @@
         "packagesPath": "C:\\Users\\leeho\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\leeho\\OneDrive\\문서\\GitHub\\Installer\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\leeho\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,10 +26,13 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Users\\leeho\\OneDrive\\문서\\GitHub\\FE Nuget Packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net9.0-windows10.0.22621": {
+          "net9.0-windows10.0.22621.0": {
+            "framework": "net9.0-windows10.0.22621",
             "targetAlias": "net9.0-windows10.0.22621.0",
             "projectReferences": {}
           }
@@ -41,11 +48,18 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
-        "net9.0-windows10.0.22621": {
+        "net9.0-windows10.0.22621.0": {
+          "framework": "net9.0-windows10.0.22621",
           "targetAlias": "net9.0-windows10.0.22621.0",
+          "dependencies": {
+            "FrogmanEngine.Installer.ScriptInterface": {
+              "target": "Package",
+              "version": "[0.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -74,7 +88,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.317/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
