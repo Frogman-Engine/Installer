@@ -2,7 +2,7 @@
   "version": 4,
   "targets": {
     "net9.0-windows10.0.22621.0": {
-      "FrogmanEngine.Installer.ScriptInterface/0.0.1": {
+      "FrogmanEngine.Installer.ScriptInterface/0.0.2": {
         "type": "package",
         "compile": {
           "lib/net9.0/Installer-Script-Interface.dll": {}
@@ -14,14 +14,15 @@
     }
   },
   "libraries": {
-    "FrogmanEngine.Installer.ScriptInterface/0.0.1": {
-      "sha512": "7auZiKFvydhW7bhAC0E+RcMIF4EpDalv8QXh9xnZ7hGWw9dgN3YNqYbFF0g7VczilH5rrJ/Iv9NIbKhSX//Sfg==",
+    "FrogmanEngine.Installer.ScriptInterface/0.0.2": {
+      "sha512": "xUAlnkTAdLeG4A22NvIMZ8VANQ4/qJL+0bTuhDCequPDrhkke+uENvwISuXaQeQrPyf0qdXeUF7fbg6jm20JrA==",
       "type": "package",
-      "path": "frogmanengine.installer.scriptinterface/0.0.1",
+      "path": "frogmanengine.installer.scriptinterface/0.0.2",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "FE Transparent.png",
-        "frogmanengine.installer.scriptinterface.0.0.1.nupkg.sha512",
+        "frogmanengine.installer.scriptinterface.0.0.2.nupkg.sha512",
         "frogmanengine.installer.scriptinterface.nuspec",
         "lib/net9.0/Installer-Script-Interface.dll"
       ]
@@ -29,7 +30,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0-windows10.0.22621.0": [
-      "FrogmanEngine.Installer.ScriptInterface >= 0.0.1"
+      "FrogmanEngine.Installer.ScriptInterface >= 0.0.2"
     ]
   },
   "packageFolders": {
@@ -89,7 +90,7 @@
         "dependencies": {
           "FrogmanEngine.Installer.ScriptInterface": {
             "target": "Package",
-            "version": "[0.0.1, )"
+            "version": "[0.0.2, )"
           }
         },
         "imports": [

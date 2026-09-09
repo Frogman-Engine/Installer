@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FrogmanEngine.Installer.ScriptInterface" Version="0.0.1" />
+    <PackageReference Include="FrogmanEngine.Installer.ScriptInterface" Version="0.0.2" />
   </ItemGroup>
 
 </Project>
