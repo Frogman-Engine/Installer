@@ -82,7 +82,7 @@ namespace Installer
                 }
                 catch(Exception e)
                 {
-                    AppendLog(e.Message);
+                    AppendLog(e.ToString());
                     MessageBox.Show("Failed to uninstall the Frogman Engine GDK!", "Uninstallation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                     Environment.Exit(-1);
                 }
@@ -106,7 +106,7 @@ namespace Installer
             }
             catch (Exception e)
             {
-                AppendLog(e.Message);
+                AppendLog(e.ToString());
                 MessageBox.Show("Failed to uninstall the Frogman Engine GDK!", "Uninstallation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(-1);
             }
@@ -125,7 +125,7 @@ namespace Installer
             }
             catch (Exception e)
             {
-                AppendLog(e.Message);
+                AppendLog(e.ToString());
                 MessageBox.Show("Installation failed!", "Installation Failure", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(-1);
             }
