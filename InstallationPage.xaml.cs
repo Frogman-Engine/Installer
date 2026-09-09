@@ -554,7 +554,7 @@ namespace Installer
             try
             {
                 // Send a GET request to the specified URL and get the response.
-                HttpResponseMessage response = httpClient.GetAsync(webUrl).Result;
+                HttpResponseMessage response = httpClient.GetAsync(webUrl, HttpCompletionOption.ResponseHeadersRead).Result;
 
                 // Check if the response indicates success (status code 200-299).
                 if (response.IsSuccessStatusCode is false)
