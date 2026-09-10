@@ -74,6 +74,7 @@ namespace Installer
         }
 
 
+        public static readonly string GDKInstallerPublishDate = "2026-09-01T00:00:00Z";
         public void OnClickDisplaySdkVersionList(object sender, RoutedEventArgs e)
         {
             SdkVersionListBox.Items.Clear();
@@ -85,7 +86,7 @@ namespace Installer
                     Debug.Assert(release.PublishedAt is not null);
                     // Compare the published date of the release with the installer version to filter out older versions
                     // lexicographically compare: release.PublishedAt < DataBase.GDKInstallerVersion
-                    if (String.Compare(release.PublishedAt, DataBase.GDKInstallerPublishDate) == -1)
+                    if (String.Compare(release.PublishedAt, GDKInstallerPublishDate) == -1)
                     {
                         continue;
                     }
