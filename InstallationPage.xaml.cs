@@ -400,7 +400,7 @@ namespace Installer
             Assembly assembly = Assembly.Load(dll, pdb);
 
             Type[] candidates = assembly.GetTypes()
-                .Where(type => type.IsPublic && (type.IsAbstract is false) && type.IsSubclassOf(typeof(ScriptMain)))
+                .Where(type => type.IsPublic && type.IsSubclassOf(typeof(ScriptMain)))
                 .ToArray();
 
             foreach (Type type in assembly.GetTypes())
